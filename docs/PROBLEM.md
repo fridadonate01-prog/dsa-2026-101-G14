@@ -89,11 +89,23 @@ After each lab, there is a small individual test (10% of the labs grade). At the
 
 ## Use of AI
 
-You may use AI to ask questions, clarifications or troubleshoot issues. You should not use AI in agentic mode, as it will be considered plagiarism. 
+You may use AI to:
+- Ask conceptual questions and clarify theory.
+- Summarize course material or external resources.
+- Test your understanding (e.g. “Why does this approach fail?”).
+- Debug errors and troubleshoot unexpected behavior.
+- Generate small, abstract examples (e.g. “How do I read query parameters in FastAPI?”)
 
-If you use AI to generate a piece of code, you should add a code comment next to it explicitely crediting it.
+You may NOT use AI to:
+- Generate complete solutions or large portions of your project code. (e.g. “Implement the /files endpoint for my HDFS system.”)
+- Use AI in agentic mode
 
-Failure to answer questions during the interviews, may prompt the professors to report you due to plagiarism to the Engineering School's board.
+To ensure AI supports learning rather than replacing it, we will rely on the following:
+- Frequent commits that reflect genuine, incremental progress.
+- A final interview, where you must demonstrate ownership and understanding of your code.
+- Tests including small coding questions which must be completed without AI assistance.
+
+Failure to demonstrate understanding will be treated the same as not having written the code yourself.
 
 ## The interview
 
