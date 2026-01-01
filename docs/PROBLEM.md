@@ -275,7 +275,27 @@ Start setting up before the session:
 - If the user writes a known street but an invalid number, allow the user to choose between the valid street numbers in the street. (^^)
 - If the user writes a street which is not known (e.g. `Carrer de Roc Voronat` instead of `Carrer de Roc Boronat`), allow the user to choose between the most similar streets. (^^^)
 
-To do so, you will need to implement:
+### Example
+
+```
+Enter map name (e.g. 'xs_2' or 'xl_1'): xl_1
+71092 houses loaded
+21349 places loaded
+18828 streets loaded
+
+
+--- ORIGIN ---
+Where are you? Address (1), Place (2) or Coordinate (3)? 1
+Enter street name (e.g. "Carrer de Roc Boronat"): Carrer de Roc Boronat
+Enter street number (e.g. "138"): 138
+
+    Found at (41.403981, 2.193255)
+
+```
+
+### Notes
+
+You will need to implement:
 - Reading and parsing `houses.txt` files (^)
 - Storing houses in a house linked list (^)
 - Sequential search amongst the houses linked list (^)
@@ -287,7 +307,26 @@ To do so, you will need to implement:
 - If the user chooses `place`, ask the user for the name of a place (e.g. `Àrea Tallers`). Print its coordinates. (^^)
 - If the user writes a place which is not known (e.g. `Area Tallers` instead of `Àrea Tallers`), allow choosing from the most similar places. (^^^)
 
-To do so, you will need to implement:
+### Example
+
+```
+Enter map name (e.g. 'xs_2' or 'xl_1'): xl_1
+71092 houses loaded
+21349 places loaded
+18828 streets loaded
+
+
+--- ORIGIN ---
+Where are you? Address (1), Place (2) or Coordinate (3)? 2
+Enter place name (e.g. "Universitat Pompeu Fabra–Campus del Poblenou" or "L'Illa Diagonal"): Universitat Pompeu Fabra–Campus del Poblenou
+
+    Found at (41.403782, 2.193446)
+
+```
+
+### Notes
+
+You will need to implement:
 - Reading and parsing `places.txt` files (^^)
 - Storing places in a place linked list (^^)
 - Sequential search amongst the places linked list (^^)
@@ -298,6 +337,32 @@ To do so, you will need to implement:
 
 - Using the source coordinates, print the street segment (i.e., the ID of two intersections) it is on. (^)
 - Print which street segments are connected to this one in the street graph. (^)
+
+### Example
+
+```
+Enter map name (e.g. 'xs_2' or 'xl_1'): xl_1
+71092 houses loaded
+21349 places loaded
+18828 streets loaded
+
+
+--- ORIGIN ---
+Where are you? Address (1), Place (2) or Coordinate (3)? 2
+Enter place name (e.g. "Universitat Pompeu Fabra–Campus del Poblenou" or "L'Illa Diagonal"): Universitat Pompeu Fabra–Campus del Poblenou
+
+    Found at (41.403782, 2.193446)
+    Closest street: Carrer de Roc Boronat
+    Between 5726734762 (41.404389, 2.192402) and 7476306084 (41.403429, 2.193660)
+
+    From this street segment, you can go to:
+    - Carrer de Roc Boronat
+        Which is connected to:
+         - Carrer de Tànger
+
+```
+
+### Notes
 
 To do so, you will need to implement:
 - Reading and parsing `streets.txt` files (^)
@@ -310,14 +375,16 @@ To do so, you will need to implement:
 ## Lab 4: Finding connected streets efficiently
 
 - Print which street segments are connected to this one in the street graph faster. (^)
+ 
+> [!NOTE]
+> Don't remove the old version finding connected streets from the list using linear search. You will need it to compare Lab 3 and Lab 4 for the report.
+
+### Notes
 
 To do so, you will need to implement:
 - A hash map, with the key being the intersection id and the value being a list of street segments it is connected to (^)
 - Load all streets from the list into an intersection graph (the hashmap). (^)
 - Unit test the intersection hashmap. (^^^)
-
-> [!NOTE]
-> Don't remove the old version finding connected streets from the list using linear search. You will need it to compare Lab 3 and Lab 4 for the report.
 
 ## Lab 5: The path between two positions
 
@@ -325,6 +392,63 @@ To do so, you will need to implement:
 - Print the step by step directions from the source to the destination. (^)
 - Extend the directions by saying `Turn left to` or `Turn right to`. (^^)
 - Extend the directions by saying `and continue for Xm`. (^^)
+
+### Example
+
+```
+Enter map name (e.g. 'xs_2' or 'xl_1'): xl_1
+71092 houses loaded
+21349 places loaded
+18828 streets loaded
+
+
+--- ORIGIN ---
+Where are you? Address (1), Place (2) or Coordinate (3)? 2
+Enter place name (e.g. "Universitat Pompeu Fabra–Campus del Poblenou" or "L'Illa Diagonal"): Universitat Pompeu Fabra–Campus del Poblenou
+
+    Found at (41.403782, 2.193446)
+    Closest street: Carrer de Roc Boronat
+    Between 5726734762 (41.404389, 2.192402) and 7476306084 (41.403429, 2.193660)
+
+    From this street segment, you can go to:
+    - Carrer de Roc Boronat
+        Which is connected to:
+         - Carrer de Tànger
+
+
+--- DESTINATION ---
+Where do you want to go? Address (1), Place (2) or Coordinate (3)? 2
+Enter place name (e.g. "Universitat Pompeu Fabra–Campus del Poblenou" or "L'Illa Diagonal"): L'Illa Diagonal
+
+    Found at (41.389559, 2.135112)
+    Closest street: Carrer de Constança
+    Between 269380768 (41.389292, 2.134767) and 12081570881 (41.389332, 2.134730)
+
+
+
+--- ROUTE ---
+  Start at Carrer de Roc Boronat
+  Turn left to Carrer de Roc Boronat and continue for 24m
+  Turn right to Carrer de Tànger and continue for 244m
+  Turn right to Carrer de Badajoz and continue for 383m
+  Turn right to Carrer de la Independència and continue for 408m
+  Turn left to Carrer d'Aragó and continue for 1463m
+  Turn right to Passeig de Sant Joan and continue for 212m
+  Turn right to Plaça de Mossèn Jacint Verdaguer and continue for 71m
+  Turn left to Avinguda Diagonal and continue for 869m
+  Turn left to Plaça del Cinc d'Oros and continue for 26m
+  Turn left to Avinguda Diagonal and continue for 795m
+  Turn right to Carrer de Casanova and continue for 3m
+  Turn left to Avinguda Diagonal (lateral muntanya) and continue for 239m
+  Turn right to Plaça de Francesc Macià and continue for 92m
+  Turn right to Avinguda de Josep Tarradellas and continue for 196m
+  Turn right to Avinguda de Sarrià and continue for 170m
+  Turn left to Travessera de les Corts and continue for 538m
+  You have arrived to Carrer de Constança
+
+```
+
+### Notes
 
 To do so, you will need to implement:
 - A queue of street lists (^)
