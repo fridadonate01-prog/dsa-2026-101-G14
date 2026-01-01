@@ -13,10 +13,12 @@ gcc --version
 ```
 
 2. Create a **private** repository for your group using this template ([clicking "use this template"](https://github.com/miquelvir/dsa-2026)). The name should be `dsa-2026-{labnumber}-{groupnumber}` (e.g. `dsa-2026-101-03`).
+
+3. [Share it](https://docs.github.com/en/enterprise-cloud@latest/repositories/managing-your-repositorys-settings-and-features/repository-access-and-collaboration/inviting-collaborators-to-a-personal-repository) with the rest of team members and [professors](https://github.com/miquelvir/dsa-2026/blob/main/docs/TEACHER_LIST.md).
   
-3. Then, [clone it using VSCode](https://code.visualstudio.com/docs/sourcecontrol/intro-to-git#_clone-a-repository-locally)
+4. Then, [clone it using VSCode](https://code.visualstudio.com/docs/sourcecontrol/intro-to-git#_clone-a-repository-locally)
    
-4. Run `make r` and make sure you see this message: `Welcome to DSA!`
+5. Run `make r` and make sure you see this message: `Welcome to DSA!`
 
 ## MacOS
 
@@ -32,9 +34,11 @@ gcc --version
 
 6. Create a **private** repository for your group using this template ([clicking "use this template"](https://github.com/miquelvir/dsa-2026)). The name should be `dsa-2026-{labnumber}-{groupnumber}` (e.g. `dsa-2026-101-03`).
 
-7. [Clone the repository using VSCode](https://code.visualstudio.com/docs/sourcecontrol/intro-to-git#_clone-a-repository-locally)
+7. [Share it](https://docs.github.com/en/enterprise-cloud@latest/repositories/managing-your-repositorys-settings-and-features/repository-access-and-collaboration/inviting-collaborators-to-a-personal-repository) with the rest of team members and [professors](https://github.com/miquelvir/dsa-2026/blob/main/docs/TEACHER_LIST.md).
+
+8. [Clone the repository using VSCode](https://code.visualstudio.com/docs/sourcecontrol/intro-to-git#_clone-a-repository-locally)
    
-8. Run `make r` and make sure you see this message: `Welcome to DSA!`
+9. Run `make r` and make sure you see this message: `Welcome to DSA!`
 
 ## Windows
 
