@@ -12,9 +12,11 @@ sudo apt install clang-format
 gcc --version
 ```
 
-2. [Clone the repository using VSCode](https://code.visualstudio.com/docs/sourcecontrol/intro-to-git#_clone-a-repository-locally)
+2. Create a **private** repository for your group using this template ([clicking "use this template"](https://github.com/miquelvir/dsa-2026)). The name should be `dsa-2026-{labnumber}-{groupnumber}` (e.g. `dsa-2026-101-03`).
+  
+3. Then, [clone it using VSCode](https://code.visualstudio.com/docs/sourcecontrol/intro-to-git#_clone-a-repository-locally)
    
-3. Run `make r` and make sure you see this message: `Welcome to DSA!`
+4. Run `make r` and make sure you see this message: `Welcome to DSA!`
 
 ## MacOS
 
@@ -28,9 +30,11 @@ gcc --version
 
 5. [Install clang-format](https://formulae.brew.sh/formula/clang-format#default)
 
-6. [Clone the repository using VSCode](https://code.visualstudio.com/docs/sourcecontrol/intro-to-git#_clone-a-repository-locally)
+6. Create a **private** repository for your group using this template ([clicking "use this template"](https://github.com/miquelvir/dsa-2026)). The name should be `dsa-2026-{labnumber}-{groupnumber}` (e.g. `dsa-2026-101-03`).
+
+7. [Clone the repository using VSCode](https://code.visualstudio.com/docs/sourcecontrol/intro-to-git#_clone-a-repository-locally)
    
-7. Run `make r` and make sure you see this message: `Welcome to DSA!`
+8. Run `make r` and make sure you see this message: `Welcome to DSA!`
 
 ## Windows
 
