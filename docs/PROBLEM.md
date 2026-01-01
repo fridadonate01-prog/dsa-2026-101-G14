@@ -251,18 +251,7 @@ While this adds up to 110%, the grade is capped at 10 before being weighted for 
 
 ## Lab 0: Developer Setup
 
-Start setting up before the session:
-- Create the repository from the [template](https://github.com/new?template_name=dsa-2026&template_owner=miquelvir) using name `dsa-2026-p000-00`. For example, if you are group `2` in lab `102`, use this name: `dsa-2026-p102-2`.
-- [Share the repository](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/repository-access-and-collaboration/inviting-collaborators-to-a-personal-repository) with your group.
-- [Share the repository](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/repository-access-and-collaboration/inviting-collaborators-to-a-personal-repository) with all teacher assistants and professors: 
-  - [@miquelvir](https://github.com/miquelvir)
-  - [@hectorflorido](https://github.com/hectorflorido)
-  - [@psantosUPF](https://github.com/psantosUPF)
-  - [@mcalveraupf](https://github.com/mcalveraupf)
-  - [@spapadiamantis](https://github.com/spapadiamantis)
-  - [@ludthor](https://github.com/ludthor)
-  - [@Mohamed0Taha](https://github.com/Mohamed0Taha)
-- Complete the [developer setup](./DEVELOPER_SETUP.md) guide.
+Complete the [developer setup](./DEVELOPER_SETUP.md) guide.
 
 ## Lab 1: Finding the coordinates of an address
 
