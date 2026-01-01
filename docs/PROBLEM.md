@@ -252,13 +252,14 @@ Start setting up before the session:
   - [@Mohamed0Taha](https://github.com/Mohamed0Taha)
 - Complete the [developer setup](./DEVELOPER_SETUP.md) guide.
 
-## Lab 1 & 2: Finding the coordinates of an address
+## Lab 1: Finding the coordinates of an address
 
-After this lab session, your program should:
 - Ask the user for a map (`xs_1`, `xs_2`, `md_1`, `lg_1`, `xl_1` or `2xl_1`). (^)
-- Allow the user to pick between an address, coordinate or a place. (^)
-- If the user chooses to describe the source with an address, ask the user for a street name and house number (e.g. `Carrer de Roc Boronat, 138`). Print its coordinates. (^)
-- Find streets even if casing does not match (e.g. `Carrer de roc boronat` instead of `Carrer de Roc Boronat`) or using abbreviations (e.g. `C. de Roc Boronat` instead of `Carrer de Roc Boronat`). (^^)
+- Ask the user how they want to input their origin position: `address`, `coordinate` or `place`. (^)
+- If the user chooses `coordinate` or `place`, print `Not implemented yet`. (^)
+- If the user chooses `address`, ask the user for a street name and house number (e.g. `Carrer de Roc Boronat, 138`). Print its coordinates. (^)
+- Find streets even if casing does not match (e.g. `Carrer de roc boronat` instead of `Carrer de Roc Boronat`). (^^)
+- Find streets even if using abbreviations (e.g. `C. de Roc Boronat` instead of `Carrer de Roc Boronat`). (^^)
 - If the user writes a known street but an invalid number, allow the user to choose between the valid street numbers in the street. (^^)
 - If the user writes a street which is not known (e.g. `Carrer de Roc Voronat` instead of `Carrer de Roc Boronat`), allow the user to choose between the most similar streets. (^^^)
 
@@ -269,10 +270,9 @@ To do so, you will need to implement:
 - To find similarly named places, use the [Levenshtein distance](#levenshtein-distance) and an adequate sorting algorithm. (^^^)
 - Unit test the houses linked list. (^^^)
 
-## Lab 3: Finding the coordinates of a place
+## Lab 2: Finding the coordinates of a place
 
-After this lab session, your program should:
-- If the user chooses to describe the source with a place, ask the user for the name of a place (e.g. `Àrea Tallers`). Print its coordinates. (^^)
+- If the user chooses `place`, ask the user for the name of a place (e.g. `Àrea Tallers`). Print its coordinates. (^^)
 - If the user writes a place which is not known (e.g. `Area Tallers` instead of `Àrea Tallers`), allow choosing from the most similar places. (^^^)
 
 To do so, you will need to implement:
@@ -282,11 +282,10 @@ To do so, you will need to implement:
 - To find similarly named places, use the [Levenshtein distance](#levenshtein-distance) and an adequate sorting algorithm. (^^^)
 - Unit test the places list. (^^^)
 
-## Lab 4: Finding connected streets
+## Lab 3: Finding connected streets
 
-After this lab session, your program should:
-- Print between which two intersections the source coordinates are located. (^)
-- Print which street segments are connected to this one. (^)
+- If the user chooses `coordinate`, print the street segment (i.e., the ID of two intersections) it is on. (^)
+- Print which street segments are connected to this one in the street graph. (^)
 
 To do so, you will need to implement:
 - Reading and parsing `streets.txt` files (^)
@@ -294,8 +293,11 @@ To do so, you will need to implement:
 - Compute the distance between the user position and every street to find the closest one. You need to calculate the [midpoint of every street segment](#midpoint-between-coordinates) and use the [Haversine formula](#haversine-formula) to compute the distance between the user coordinates and each street midpoint. (^)
 - Unit test the streets linked list. (^^^)
 - Make finding the closest street faster by choosing and implementing a better data structure than a list. (^^^^)
+- Linear search through all the streets list to find connected streets. (^)
 
-## Lab 5: Finding connected streets efficiently
+## Lab 4: Finding connected streets efficiently
+
+- Print which street segments are connected to this one in the street graph faster. (^)
 
 To do so, you will need to implement:
 - A hash map, with the key being the intersection id and the value being a list of street segments it is connected to (^)
@@ -303,13 +305,12 @@ To do so, you will need to implement:
 - Unit test the intersection hashmap. (^^^)
 
 > [!NOTE]
-> Don't remove the old version finding connected streets from the list. You will need it to compare Lab 3 and Lab 4 for the report.
+> Don't remove the old version finding connected streets from the list using linear search. You will need it to compare Lab 3 and Lab 4 for the report.
 
-## Lab 6: The path between two positions
+## Lab 5: The path between two positions
 
-After this lab session, your program should:
-- Ask the user for a destination (coordinates, place or address like the source). (^)
-- Print the step by step directions. (^)
+- Ask the user for a destination (`coordinate`, `place` or `address`). (^)
+- Print the step by step directions from the source to the destination. (^)
 - Extend the directions by saying `Turn left to` or `Turn right to`. (^^)
 - Extend the directions by saying `and continue for Xm`. (^^)
 
@@ -319,13 +320,13 @@ To do so, you will need to implement:
 - Use the [cross product](#turning-right-or-left) to know whether the route turns left or right (^^).
 - Unit test the path finding algorithm. (^^^)
 - Make the [BFS algorithm](#breadth-first-search) more efficient by implementing a better data structure for the existing `visited` street list. (^^^)
-- Consider the street length as the weight of edges in the graph. Choose a suitable algorithm other than BFS and implement it. (^^^^)
+- Consider the street length as the weight of edges in the graph. Choose a suitable path finding algorithm other than BFS and implement it. (^^^^)
 - Extend your path finding algorithm above with support for traffic congestion and temporary road closures by designing your own algorithm or formula. (^^^^)
 - Speed up pathfinding through path caching and/or graph contraction. Design and implement an adequate data structure or algorithm. (^^^^)
 
 You may suggest another task of similar scope to any of the (^^^^) tasks and implement that one instead. To do so, ask your lab's professor for permission. Once they have agreed to it, send your task suggestion to `miquel.vazquez@upf.edu` to get approval (for fairness purposes, we need to make sure tasks across all groups meet or raise the bar).
 
-## Lab 7: Finish it up
+## Lab 6 & 7: Finish it up
 
 Use these two sessions to finish work from previous labs. Focus on implementing tasks with (^^) or more difficulty once you have finished the basic ones. Feel free to discuss with your lab TA / Professor for advice!
 
