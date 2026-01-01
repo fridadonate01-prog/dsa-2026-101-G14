@@ -252,7 +252,7 @@ Start setting up before the session:
   - [@Mohamed0Taha](https://github.com/Mohamed0Taha)
 - Complete the [developer setup](./DEVELOPER_SETUP.md) guide.
 
-## Lab 1: Finding the coordinates of an address
+## Lab 1 & 2: Finding the coordinates of an address
 
 After this lab session, your program should:
 - Ask the user for a map (`xs_1`, `xs_2`, `md_1`, `lg_1`, `xl_1` or `2xl_1`). (^)
@@ -269,7 +269,7 @@ To do so, you will need to implement:
 - To find similarly named places, use the [Levenshtein distance](#levenshtein-distance) and an adequate sorting algorithm. (^^^)
 - Unit test the houses linked list. (^^^)
 
-## Lab 2: Finding the coordinates of a place
+## Lab 3: Finding the coordinates of a place
 
 After this lab session, your program should:
 - If the user chooses to describe the source with a place, ask the user for the name of a place (e.g. `Àrea Tallers`). Print its coordinates. (^^)
@@ -282,7 +282,7 @@ To do so, you will need to implement:
 - To find similarly named places, use the [Levenshtein distance](#levenshtein-distance) and an adequate sorting algorithm. (^^^)
 - Unit test the places list. (^^^)
 
-## Lab 3: Finding connected streets
+## Lab 4: Finding connected streets
 
 After this lab session, your program should:
 - Print between which two intersections the source coordinates are located. (^)
@@ -295,7 +295,7 @@ To do so, you will need to implement:
 - Unit test the streets linked list. (^^^)
 - Make finding the closest street faster by choosing and implementing a better data structure than a list. (^^^^)
 
-## Lab 4: Finding connected streets efficiently
+## Lab 5: Finding connected streets efficiently
 
 To do so, you will need to implement:
 - A hash map, with the key being the intersection id and the value being a list of street segments it is connected to (^)
@@ -305,7 +305,7 @@ To do so, you will need to implement:
 > [!NOTE]
 > Don't remove the old version finding connected streets from the list. You will need it to compare Lab 3 and Lab 4 for the report.
 
-## Lab 5: The path between two positions
+## Lab 6: The path between two positions
 
 After this lab session, your program should:
 - Ask the user for a destination (coordinates, place or address like the source). (^)
@@ -325,7 +325,7 @@ To do so, you will need to implement:
 
 You may suggest another task of similar scope to any of the (^^^^) tasks and implement that one instead. To do so, ask your lab's professor for permission. Once they have agreed to it, send your task suggestion to `miquel.vazquez@upf.edu` to get approval (for fairness purposes, we need to make sure tasks across all groups meet or raise the bar).
 
-## Lab 6 & 7: Finish it up
+## Lab 7: Finish it up
 
 Use these two sessions to finish work from previous labs. Focus on implementing tasks with (^^) or more difficulty once you have finished the basic ones. Feel free to discuss with your lab TA / Professor for advice!
 
