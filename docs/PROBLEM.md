@@ -544,10 +544,13 @@ You must deliver a report by the end of the project.
   - A plot comparing the latency to find connected streets by sequentially looking through the list (lab 3) compared to using the intersections map (lab 4), depending on the map size.
     - Experimentally determine the results by measuring multiple times your program's behaviour with different relevant scenarios in the same machine. Include your raw data in the report, besides the plot.
     - Explain the results.
-  - A plot comparing the latency to find a path between two points that are close in the map compared to two points that are very far in the map, for different scenarios.
+  - A plot comparing the latency to find a path between two points finding connected streets sequentially looking through the list compared to using the intersections map, depending on the map size.
     - Experimentally determine the results by measuring multiple times your program's behaviour with different relevant scenarios in the same machine. Include your raw data in the report, besides the plot.
     - Explain the results.
-  - A plot comparing the latency to find a path between two points that are very far in the map, depending on the map size and the data structure used for the visited list (e.g. a list vs your improvement).
+  - A plot comparing the latency to find a path between two points that are close in the map compared to two points that are very far in the map, for different distances.
+    - Experimentally determine the results by measuring multiple times your program's behaviour with different relevant scenarios in the same machine. Include your raw data in the report, besides the plot.
+    - Explain the results.
+  - A plot comparing the latency to find a path between two points that are very far in the map, depending on the map size and the data structure used for the visited list in the path finding algorithm (e.g. a list vs your improvement).
     - Experimentally determine the results by measuring multiple times your program's behaviour with different relevant scenarios in the same machine. Include your raw data in the report, besides the plot.
     - Explain the results.
   - Describe an improvement to the `visited` data structure in the BFS algorithm to improve runtime complexity / latency. 
