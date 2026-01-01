@@ -12,7 +12,7 @@ sudo apt install clang-format
 gcc --version
 ```
 
-2. Create a **private** repository for your group using this template ([clicking "use this template"](https://github.com/miquelvir/dsa-2026)). The name should be `dsa-2026-{labnumber}-{groupnumber}` (e.g. `dsa-2026-101-03`).
+2. Create a **private** repository for your group using this template ([clicking "use this template"](https://github.com/miquelvir/dsa-2026)). The name should be `dsa-2026-{labnumber}-{groupnumber}` (e.g. `dsa-2026-101-03`). The `groupnumber` is the one you chose in Aula Global.
 
 3. [Share it](https://docs.github.com/en/enterprise-cloud@latest/repositories/managing-your-repositorys-settings-and-features/repository-access-and-collaboration/inviting-collaborators-to-a-personal-repository) with the rest of team members and [professors](https://github.com/miquelvir/dsa-2026/blob/main/docs/TEACHER_LIST.md).
   
@@ -32,7 +32,7 @@ gcc --version
 
 5. [Install clang-format](https://formulae.brew.sh/formula/clang-format#default)
 
-6. Create a **private** repository for your group using this template ([clicking "use this template"](https://github.com/miquelvir/dsa-2026)). The name should be `dsa-2026-{labnumber}-{groupnumber}` (e.g. `dsa-2026-101-03`).
+6. Create a **private** repository for your group using this template ([clicking "use this template"](https://github.com/miquelvir/dsa-2026)). The name should be `dsa-2026-{labnumber}-{groupnumber}` (e.g. `dsa-2026-101-03`). The `groupnumber` is the one you chose in Aula Global.
 
 7. [Share it](https://docs.github.com/en/enterprise-cloud@latest/repositories/managing-your-repositorys-settings-and-features/repository-access-and-collaboration/inviting-collaborators-to-a-personal-repository) with the rest of team members and [professors](https://github.com/miquelvir/dsa-2026/blob/main/docs/TEACHER_LIST.md).
 
