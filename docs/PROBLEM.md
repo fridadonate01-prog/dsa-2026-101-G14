@@ -296,7 +296,7 @@ To do so, you will need to implement:
 
 ## Lab 3: Finding connected streets
 
-- If the user chooses `coordinate`, print the street segment (i.e., the ID of two intersections) it is on. (^)
+- Using the source coordinates, print the street segment (i.e., the ID of two intersections) it is on. (^)
 - Print which street segments are connected to this one in the street graph. (^)
 
 To do so, you will need to implement:
