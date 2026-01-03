@@ -2,33 +2,9 @@
 
 `Data Structures and Algorithms - 2025 / 2026`
 
-During this project, you will **build a program like Google Maps**. The user must be able to input a source address (`F`) and a destination addresses (`T`). Then, the program must print a list of directions guiding them from `F` to `T`. For example, if the user wants to go from `Passatge de la Dra. Remeis, 2` to `Avinguda Vertical, 4`, your program should print something like (simplified):
+During this project, you will **build a program like Google Maps**. The user must be able to input a source address (`F`) and a destination addresses (`T`). Then, the program must print a list of directions guiding them from `F` to `T`. 
 
-```
-Route from Passatge de la Dra. Remeis, 2 (17.000000,30.666667) to Avinguda Vertical, 4 (12.333333,37.000000).
-
-- Turn left in C. del Baixant and continue for 100m
-- Turn right in C. Pompeu Fabra and continue for 100m
-- Turn left in Av. Vertical and continue for 100m
-- You have reached your destination
-```
-
-<picture>
-  <source 
-    media="(prefers-color-scheme: dark)" 
-    srcset="./problem_images/example_map_w_route_dark.svg">
-  <source 
-    media="(prefers-color-scheme: light)"
-    srcset="./problem_images/example_map_w_route.svg">
-  <img 
-    alt="Example map with a route" 
-    srcset="./problem_images/example_map_w_route.svg"
-    style="display: block; margin: 0 auto; max-width: 600px; height: auto;">
-</picture>
-
-# Example
-
-This is a comprehensive example of what using the program should look like after finishing the implementation.
+## Example
 
 ```
 Enter map name (e.g. 'xs_2' or 'xl_1'): xl_1
