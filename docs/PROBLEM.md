@@ -12,11 +12,13 @@
    * 🛠️ [Lab 0: Developer Setup](#lab-0-developer-setup)
    * 📍 [Lab 1: Finding the coordinates of an address](#lab-1-finding-the-coordinates-of-an-address)
    * 🏛️ [Lab 2: Finding the coordinates of a place](#lab-2-finding-the-coordinates-of-a-place)
-   * 🧵 [Lab 3: Finding connected streets](#lab-3-finding-connected-streets)
+   * 🔗 [Lab 3: Finding connected streets](#lab-3-finding-connected-streets)
    * ⚡ [Lab 4: Finding connected streets efficiently](#lab-4-finding-connected-streets-efficiently)
    * 🧭 [Lab 5: The path between two positions](#lab-5-the-path-between-two-positions)
-5. 📝 [Report](#report)
-6. 🎓 [Deliverables & grade](#deliverables--grade)
+5. 🎓 [Deliverables & grade](#deliverables--grade)
+   * 🤖 [Use of AI](#use-of-ai)
+   * 📝 [Report](#report)
+   * 🧑‍🏫 [Interview](#interview)
 7. 📖 [Reference](#reference)
    * ✏️ [Levenshtein Distance](#levenshtein-distance)
    * 🌍 [Haversine formula](#haversine-formula)
@@ -421,33 +423,6 @@ Use these two sessions to finish work from previous labs. Focus on implementing 
 During the last two lab sessions, you need to defend your project during the interviews with your Teacher Assistant or Professor.
 
 
-# Report
-
-You must deliver a report by the end of the project.
-
-- Write the report using [Markdown](https://www.markdownguide.org/) in the [REPORT.md file](./REPORT.md).
-- The report must contain answers to the following (and only the following) questions:
-  - Runtime complexity analysis of initializing the intersections map in Big-O.
-  - Runtime complexity analysis of finding the coordinates of a street or place given the name in Big-O.
-  - Runtime complexity analysis of your path-finding algorithm in Big-O.
-  - A plot comparing the latency to find connected streets by sequentially looking through the list (lab 3) compared to using the intersections map (lab 4), depending on the map size.
-    - Experimentally determine the results by measuring multiple times your program's behaviour with different relevant scenarios in the same machine. Include your raw data in the report, besides the plot.
-    - Explain the results.
-  - A plot comparing the latency to find a path between two points finding connected streets sequentially looking through the list compared to using the intersections map, depending on the map size.
-    - Experimentally determine the results by measuring multiple times your program's behaviour with different relevant scenarios in the same machine. Include your raw data in the report, besides the plot.
-    - Explain the results.
-  - A plot comparing the latency to find a path between two points that are close in the map compared to two points that are very far in the map, for different distances.
-    - Experimentally determine the results by measuring multiple times your program's behaviour with different relevant scenarios in the same machine. Include your raw data in the report, besides the plot.
-    - Explain the results.
-  - Describe an improvement to the `visited` data structure in the BFS algorithm to improve latency. 
-    - Justify which data structure you would use / have used instead of a list to improve performance.
-    - Describe its current runtime complexity and the improved runtime complexity.
-    - Describe any trade-offs or downsides of your approach regarding latency or memory usage.
-  - Describe an improvement to the algorithm to find the street segment given a latitude and longitude to improve its runtime complexity / latency.
-    - Justify which data structure or algorithm you would use / have used to improve latency.
-    - Describe its current runtime complexity and the improved runtime complexity.
-    - Describe any trade-offs or downsides of your approach regarding latency or memory usage.
-
 # Deliverables & grade
 
 By the end of the project, every team must deliver:
@@ -478,7 +453,35 @@ To ensure AI supports learning rather than replacing it, we will rely on the fol
 
 Failure to demonstrate understanding will be treated the same as not having written the code yourself.
 
-## The interview
+
+## Report
+
+You must deliver a report by the end of the project.
+
+- Write the report using [Markdown](https://www.markdownguide.org/) in the [REPORT.md file](./REPORT.md).
+- The report must contain answers to the following (and only the following) questions:
+  - Runtime complexity analysis of initializing the intersections map in Big-O.
+  - Runtime complexity analysis of finding the coordinates of a street or place given the name in Big-O.
+  - Runtime complexity analysis of your path-finding algorithm in Big-O.
+  - A plot comparing the latency to find connected streets by sequentially looking through the list (lab 3) compared to using the intersections map (lab 4), depending on the map size.
+    - Experimentally determine the results by measuring multiple times your program's behaviour with different relevant scenarios in the same machine. Include your raw data in the report, besides the plot.
+    - Explain the results.
+  - A plot comparing the latency to find a path between two points finding connected streets sequentially looking through the list compared to using the intersections map, depending on the map size.
+    - Experimentally determine the results by measuring multiple times your program's behaviour with different relevant scenarios in the same machine. Include your raw data in the report, besides the plot.
+    - Explain the results.
+  - A plot comparing the latency to find a path between two points that are close in the map compared to two points that are very far in the map, for different distances.
+    - Experimentally determine the results by measuring multiple times your program's behaviour with different relevant scenarios in the same machine. Include your raw data in the report, besides the plot.
+    - Explain the results.
+  - Describe an improvement to the `visited` data structure in the BFS algorithm to improve latency. 
+    - Justify which data structure you would use / have used instead of a list to improve performance.
+    - Describe its current runtime complexity and the improved runtime complexity.
+    - Describe any trade-offs or downsides of your approach regarding latency or memory usage.
+  - Describe an improvement to the algorithm to find the street segment given a latitude and longitude to improve its runtime complexity / latency.
+    - Justify which data structure or algorithm you would use / have used to improve latency.
+    - Describe its current runtime complexity and the improved runtime complexity.
+    - Describe any trade-offs or downsides of your approach regarding latency or memory usage.
+
+## Interview
 
 During the interview, we expect you to understand and be able to explain any part of the codebase:
 - Implementation details
