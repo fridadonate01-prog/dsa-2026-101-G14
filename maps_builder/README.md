@@ -4,7 +4,7 @@ You can build your own maps if you want:
 
 1. Navigate to a region in [OpenStreetMap](https://www.openstreetmap.org/export#map=16/41.39706/2.15935).
 2. Click `Overpass API` to download an XML file with all the map data. Copy the path to this file.
-3. Create the `houses.txt` and `streets.txt` files:
+3. Create the simplified datasets:
 
 ```zsh
 cd maps_builder
