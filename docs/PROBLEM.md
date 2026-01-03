@@ -1,6 +1,11 @@
-## 📚 Table of Contents
 
-1. 🧪 [Example](#example)
+# Building Google Maps
+
+`Data Structures and Algorithms - 2025 / 2026`
+
+## Table of Contents
+
+1. 🚀 [Product vision](#product-vision)
 2. 🗺️ [Introduction to maps](#introduction-to-maps)
 3. 🏗️ [Design](#design)
 4. 🧩 [Work breakdown](#work-breakdown)
@@ -24,13 +29,9 @@
 9. 🗄️ [Datasets](#datasets)
 10. ❓ [FAQ](#faq)
 
-# Building Google Maps
+# Product vision
 
-`Data Structures and Algorithms - 2025 / 2026`
-
-During this project, you will **build a program like Google Maps**. The user must be able to input a source address (`F`) and a destination addresses (`T`). Then, the program must print a list of directions guiding them from `F` to `T`. 
-
-## Example
+During this project, you will **build a program like Google Maps**. The user must be able to input a source address (`F`) and a destination addresses (`T`). Then, the program must print a list of directions guiding them from `F` to `T`.
 
 ```
 Enter map name (e.g. 'xs_2' or 'xl_1'): xl_1
