@@ -44,6 +44,12 @@ make f
 make v
 ```
 
+## How to use Valgrind to profile the heap
+
+```zsh
+make vm
+```
+
 ## How to debug
 
 ```zsh
