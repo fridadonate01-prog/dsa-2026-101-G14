@@ -11,6 +11,10 @@ v:
 	make compile
 	valgrind --leak-check=yes ./main.out
 
+vm: 
+    make compile
+    valgrind --tool=massif ./main.out
+
 compiledebug:
 	gcc src/main.c $(SRC_FILES) -fsanitize=address -g -o main.out -lm
 
