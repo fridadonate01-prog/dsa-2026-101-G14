@@ -5,7 +5,7 @@
 
 ## Table of Contents
 
-1. 🚀 [Product vision](#product-vision)
+1. 🚀 [Goal](#goal)
 2. 🗺️ [Introduction to maps](#introduction-to-maps)
 3. 🏗️ [Design](#design)
 4. 🧩 [Work breakdown](#work-breakdown)
@@ -28,7 +28,7 @@
 8. 🌐 [Datasets](#datasets)
 9. ❓ [FAQ](#faq)
 
-# Product vision
+# Goal
 
 During this project, you will **build a program like Google Maps**. The user must be able to input a source address (`F`) and a destination addresses (`T`). Then, the program must print a list of directions guiding them from `F` to `T`.
 
