@@ -23,7 +23,7 @@
    * 📐 [Midpoint between coordinates](#midpoint-between-coordinates)
    * 🌲 [Breadth First Search](#breadth-first-search)
    * 🔄 [Turning right or left](#turning-right-or-left)
-8. 🗄️ [Datasets](#datasets)
+8. 🌐 [Datasets](#datasets)
 9. ❓ [FAQ](#faq)
 
 # Product vision
