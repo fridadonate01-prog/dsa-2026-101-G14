@@ -53,45 +53,6 @@ Enter place name (e.g. "Universitat Pompeu Fabra–Campus del Poblenou" or "L'Il
   You have arrived to your destination
 ```
 
-# Deliverables & grade
-
-By the end of the project, every team must deliver:
-
-- Source code for the program in your GitHub repository. (40% of the labs grade)
-  - This grade includes using GitHub branches, PRs and proper commit names.
-- [A report](#report). (10% of the labs grade)
-
-After each lab, there is a small individual test (10% of the labs grade). At the end of the project, we will also interview each member individually (40% of the labs grade). You must pass the interview to pass the labs.
-
-## Use of AI
-
-You may use AI to:
-- Ask conceptual questions and clarify theory.
-- Summarize course material or external resources.
-- Test your understanding (e.g. “Why does this approach fail?”).
-- Debug errors and troubleshoot unexpected behavior.
-- Generate small, abstract examples (e.g. “How do I read query parameters in FastAPI?”)
-
-You may NOT use AI to:
-- Generate complete solutions or large portions of your project code. (e.g. “Implement the /files endpoint for my HDFS system.”)
-- Use AI in agentic mode
-
-To ensure AI supports learning rather than replacing it, we will rely on the following:
-- Frequent commits that reflect genuine, incremental progress.
-- A final interview, where you must demonstrate ownership and understanding of your code.
-- Tests including small coding questions which must be completed without AI assistance.
-
-Failure to demonstrate understanding will be treated the same as not having written the code yourself.
-
-## The interview
-
-During the interview, we expect you to understand and be able to explain any part of the codebase:
-- Implementation details
-- Design decisions
-- Conceptual understanding about the algorithms and data structures you use
-- Runtime complexity and trade-offs
-- Any answer from your report
-
 # Introduction to maps
 
 Maps are composed of three components:
@@ -435,78 +396,6 @@ Use these two sessions to finish work from previous labs. Focus on implementing 
 
 During the last two lab sessions, you need to defend your project during the interviews with your Teacher Assistant or Professor.
 
-# Datasets
-
-The repository contains different maps you can use to test your program inside the [maps](./maps/) folder. Start testing with `xs_1` (the smallest and simplest map). Then progress towards bigger and more complex maps like `md_1`, or `lg_1`.
-
-## xs_1
-
-A small synthetic map with 11 intersections.
-
-<picture>
-  <source 
-    media="(prefers-color-scheme: dark)" 
-    srcset="./problem_images/example_map_dark.svg">
-  <source 
-    media="(prefers-color-scheme: light)"
-    srcset="./problem_images/example_map.svg">
-  <img 
-    alt="xs1 map" 
-    srcset="./problem_images/example_map.svg"
-    style="display: block; margin: 0 auto; max-width: 300px; height: auto;">
-</picture>
-
-[View files.](./maps/xs_1/)
-
-## xs_2
-
-A small real map of a couple of city blocks around the University with 71 intersections.
-
-![map](./problem_images/xs_2_map.png)
-
-[View in OpenStreetMap.](https://www.openstreetmap.org/export#map=18/41.403585/2.194433)
-
-[View files.](./../maps/xs_2/)
-
-## md_1
-
-A medium real map of the city blocks around the University with 1122 intersections.
-
-![map](./problem_images/md_1_map.png)
-
-[View in OpenStreetMap.](https://www.openstreetmap.org/export#map=16/41.40354/2.19729)
-
-[View files.](./../maps/md_1/)
-
-## lg_1
-
-A large real map of Poblenou with 3283 intersections.
-
-![map](./problem_images/lg_1_map.png)
-
-[View in OpenStreetMap.](https://www.openstreetmap.org/export#map=15/41.39820/2.19744)
-
-[View files.](./../maps/lg_1/)
-
-## xl_1
-
-An extra large real map of Barcelona with 15378 intersections.
-
-![map](./problem_images/xl_1_map.png)
-
-[View in OpenStreetMap.](https://www.openstreetmap.org/export#map=14/41.39532/2.16680)
-
-[View files.](./../maps/xl_1/)
-
-### 2xl_1
-
-A map of Barcelona and neighbouring cities.
-
-![map](./problem_images/2xl_1_map.png)
-
-[View in OpenStreetMap](https://www.openstreetmap.org/export#map=12/41.4086/2.0668)
-
-[View files.](./../maps/2xl_1/)
 
 # Report
 
@@ -537,6 +426,45 @@ You must deliver a report by the end of the project.
     - Justify which data structure or algorithm you would use / have used to improve runtime complexity / latency.
     - Describe its current runtime complexity and the improved runtime complexity.
     - Describe any trade-offs or downsides of your approach regarding latency or memory usage.
+
+# Deliverables & grade
+
+By the end of the project, every team must deliver:
+
+- Source code for the program in your GitHub repository. (40% of the labs grade)
+  - This grade includes using GitHub branches, PRs and proper commit names.
+- [A report](#report). (10% of the labs grade)
+
+After each lab, there is a small individual test (10% of the labs grade). At the end of the project, we will also interview each member individually (40% of the labs grade). You must pass the interview to pass the labs.
+
+## Use of AI
+
+You **may** use AI to:
+- Ask conceptual questions and clarify theory.
+- Summarize course material or external resources.
+- Test your understanding (e.g. “Why does this approach fail?”).
+- Debug errors and troubleshoot unexpected behavior.
+- Generate small, abstract examples (e.g. “How do I read query parameters in FastAPI?”)
+
+You **may NOT** use AI to:
+- Generate complete solutions or large portions of your project code. (e.g. “Implement the /files endpoint for my HDFS system.”)
+- Use AI in agentic mode
+
+To ensure AI supports learning rather than replacing it, we will rely on the following:
+- Frequent commits that reflect genuine, incremental progress.
+- A final interview, where you must demonstrate ownership and understanding of your code.
+- Tests including small coding questions which must be completed without AI assistance.
+
+Failure to demonstrate understanding will be treated the same as not having written the code yourself.
+
+## The interview
+
+During the interview, we expect you to understand and be able to explain any part of the codebase:
+- Implementation details
+- Design decisions
+- Conceptual understanding about the algorithms and data structures you use
+- Runtime complexity and trade-offs
+- Any answer from your report
 
 # Reference
 
@@ -732,6 +660,79 @@ void latlon_to_xy(double lat_ref, double lon_ref,
     *y = EARTH_RADIUS * dlat;
 }
 ```
+
+## Datasets
+
+The repository contains different maps you can use to test your program inside the [maps](./maps/) folder. Start testing with `xs_1` (the smallest and simplest map). Then progress towards bigger and more complex maps like `md_1`, or `lg_1`.
+
+### xs_1
+
+A small synthetic map with 11 intersections.
+
+<picture>
+  <source 
+    media="(prefers-color-scheme: dark)" 
+    srcset="./problem_images/example_map_dark.svg">
+  <source 
+    media="(prefers-color-scheme: light)"
+    srcset="./problem_images/example_map.svg">
+  <img 
+    alt="xs1 map" 
+    srcset="./problem_images/example_map.svg"
+    style="display: block; margin: 0 auto; max-width: 300px; height: auto;">
+</picture>
+
+[View files.](./maps/xs_1/)
+
+### xs_2
+
+A small real map of a couple of city blocks around the University with 71 intersections.
+
+![map](./problem_images/xs_2_map.png)
+
+[View in OpenStreetMap.](https://www.openstreetmap.org/export#map=18/41.403585/2.194433)
+
+[View files.](./../maps/xs_2/)
+
+### md_1
+
+A medium real map of the city blocks around the University with 1122 intersections.
+
+![map](./problem_images/md_1_map.png)
+
+[View in OpenStreetMap.](https://www.openstreetmap.org/export#map=16/41.40354/2.19729)
+
+[View files.](./../maps/md_1/)
+
+### lg_1
+
+A large real map of Poblenou with 3283 intersections.
+
+![map](./problem_images/lg_1_map.png)
+
+[View in OpenStreetMap.](https://www.openstreetmap.org/export#map=15/41.39820/2.19744)
+
+[View files.](./../maps/lg_1/)
+
+### xl_1
+
+An extra large real map of Barcelona with 15378 intersections.
+
+![map](./problem_images/xl_1_map.png)
+
+[View in OpenStreetMap.](https://www.openstreetmap.org/export#map=14/41.39532/2.16680)
+
+[View files.](./../maps/xl_1/)
+
+### 2xl_1
+
+A map of Barcelona and neighbouring cities.
+
+![map](./problem_images/2xl_1_map.png)
+
+[View in OpenStreetMap](https://www.openstreetmap.org/export#map=12/41.4086/2.0668)
+
+[View files.](./../maps/2xl_1/)
 
 # FAQ 
 
