@@ -207,10 +207,8 @@ We have divided all tasks into four categories so you can prioritize implementin
 |----------------------|------------------------------------------|----------|
 | 50% | Essential, needed to get something working. 15% is part of the mid-term submission, 35% is part of the final delivery.       | (^)      |
 | 20% | Nice-to-haves, not required to get something working. 10% is part of the mid-term submission, 10% is part of the final delivery.  | (^^)     |
-| 20% | Difficult, complex exercises             | (^^^)    |
-| 20% | Advanced, challenges for diving deep       | (^^^^)   |
-
-While this adds up to 110%, the grade is capped at 10 before being weighted for the lab's grade. The extra 10% in (^^^^) can help you in case you make minor mistakes elsewhere.
+| 15% | Difficult, complex exercises             | (^^^)    |
+| 5% | Advanced, challenges for diving deep. Choose one.       | (^^^^)   |
 
 ## Lab 1: Developer Setup
 
@@ -409,7 +407,6 @@ To do so, you will need to implement:
 - Unit test the path finding algorithm. (^^^)
 - Make the [BFS algorithm](#breadth-first-search) more efficient by implementing a better data structure for the existing `visited` street list. (^^^)
 - Consider the street length as the weight of edges in the graph. Choose a suitable path finding algorithm other than BFS and implement it. (^^^^)
-- Extend your path finding algorithm above with support for traffic congestion and temporary road closures by designing your own algorithm or formula. (^^^^)
 - Speed up pathfinding through path caching and/or graph contraction. Design and implement an adequate data structure or algorithm. (^^^^)
 
 You may suggest another task of similar scope to any of the (^^^^) tasks and implement that one instead. To do so, ask your lab's professor for permission. Once they have agreed to it, send your task suggestion to `miquel.vazquez@upf.edu` to get approval (for fairness purposes, we need to make sure tasks across all groups meet or raise the bar).
