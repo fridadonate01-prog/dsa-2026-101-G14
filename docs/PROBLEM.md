@@ -252,6 +252,9 @@ You will need to implement:
 - To find similarly named places, use the [Levenshtein distance](#levenshtein-distance) and an adequate sorting algorithm. (^^^)
 - Unit test the houses linked list. (^^^)
 
+> [!WARNING]
+> Adding all your code to `main.c` is not a good practice because it will grow huge. Consider creating new files and importing them for modularity.
+
 ## Lab 3: Finding the coordinates of a place
 
 - If the user chooses `place`, ask the user for the name of a place (e.g. `Àrea Tallers`). Print its coordinates. (^^)
