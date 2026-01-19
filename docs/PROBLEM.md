@@ -9,12 +9,12 @@
 2. 🗺️ [Introduction to maps](#introduction-to-maps)
 3. 🏗️ [Design](#design)
 4. 🧩 [Work breakdown](#work-breakdown)
-   * 🛠️ [Lab 0: Developer Setup](#lab-0-developer-setup)
-   * 📍 [Lab 1: Finding the coordinates of an address](#lab-1-finding-the-coordinates-of-an-address)
-   * 🏛️ [Lab 2: Finding the coordinates of a place](#lab-2-finding-the-coordinates-of-a-place)
-   * 🔗 [Lab 3: Finding connected streets](#lab-3-finding-connected-streets)
-   * ⚡ [Lab 4: Finding connected streets efficiently](#lab-4-finding-connected-streets-efficiently)
-   * 🧭 [Lab 5: The path between two positions](#lab-5-the-path-between-two-positions)
+   * 🛠️ [Lab 1: Developer Setup](#lab-1-developer-setup)
+   * 📍 [Lab 2: Finding the coordinates of an address](#lab-2-finding-the-coordinates-of-an-address)
+   * 🏛️ [Lab 3: Finding the coordinates of a place](#lab-3-finding-the-coordinates-of-a-place)
+   * 🔗 [Lab 4: Finding connected streets](#lab-4-finding-connected-streets)
+   * ⚡ [Lab 5: Finding connected streets efficiently](#lab-5-finding-connected-streets-efficiently)
+   * 🧭 [Lab 6: The path between two positions](#lab-6-the-path-between-two-positions)
 5. 🎓 [Deliverables & grade](#deliverables--grade)
    * 🤖 [Use of AI](#use-of-ai)
    * 📝 [Report](#report)
@@ -212,11 +212,11 @@ We have divided all tasks into four categories so you can prioritize implementin
 
 While this adds up to 110%, the grade is capped at 10 before being weighted for the lab's grade. The extra 10% in (^^^^) can help you in case you make minor mistakes elsewhere.
 
-## Lab 0: Developer Setup
+## Lab 1: Developer Setup
 
-Complete the [developer setup](./DEVELOPER_SETUP.md) guide.
+Complete the [developer setup](./DEVELOPER_SETUP.md) guide. Then, start with the tasks for the next lab.
 
-## Lab 1: Finding the coordinates of an address
+## Lab 2: Finding the coordinates of an address
 
 - Ask the user for a map (`xs_1`, `xs_2`, `md_1`, `lg_1`, `xl_1` or `2xl_1`). (^)
 - Ask the user how they want to input their origin position: `address`, `coordinate` or `place`. (^)
@@ -254,7 +254,7 @@ You will need to implement:
 - To find similarly named places, use the [Levenshtein distance](#levenshtein-distance) and an adequate sorting algorithm. (^^^)
 - Unit test the houses linked list. (^^^)
 
-## Lab 2: Finding the coordinates of a place
+## Lab 3: Finding the coordinates of a place
 
 - If the user chooses `place`, ask the user for the name of a place (e.g. `Àrea Tallers`). Print its coordinates. (^^)
 - If the user writes a place which is not known (e.g. `Area Tallers` instead of `Àrea Tallers`), allow choosing from the most similar places. (^^^)
@@ -285,7 +285,7 @@ You will need to implement:
 - To find similarly named places, use the [Levenshtein distance](#levenshtein-distance) and an adequate sorting algorithm. (^^^)
 - Unit test the places list. (^^^)
 
-## Lab 3: Finding connected streets
+## Lab 4: Finding connected streets
 
 - Using the source coordinates, print the street segment (i.e., the ID of two intersections) it is on. (^)
 - Print which street segments are connected to this one in the street graph. (^)
@@ -324,7 +324,7 @@ To do so, you will need to implement:
 - Make finding the closest street faster by choosing and implementing a better data structure than a list. (^^^^)
 - Linear search through all the streets list to find connected streets. (^)
 
-## Lab 4: Finding connected streets efficiently
+## Lab 5: Finding connected streets efficiently
 
 - Print which street segments are connected to this one in the street graph faster. (^)
  
@@ -414,11 +414,11 @@ To do so, you will need to implement:
 
 You may suggest another task of similar scope to any of the (^^^^) tasks and implement that one instead. To do so, ask your lab's professor for permission. Once they have agreed to it, send your task suggestion to `miquel.vazquez@upf.edu` to get approval (for fairness purposes, we need to make sure tasks across all groups meet or raise the bar).
 
-## Lab 6 & 7: Finish it up
+## Lab 7 & 8: Finish it up
 
 Use these two sessions to finish work from previous labs. Focus on implementing tasks with (^^) or more difficulty once you have finished the basic ones. Feel free to discuss with your lab TA / Professor for advice!
 
-## Lab 8 & 9: Interviews
+## Lab 9 & 10: Interviews
 
 During the last two lab sessions, you need to defend your project during the interviews with your Teacher Assistant or Professor.
 
