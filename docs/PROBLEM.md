@@ -206,8 +206,8 @@ We have divided all tasks into four categories so you can prioritize implementin
 | Weight               | Description                              | Symbol   |
 |----------------------|------------------------------------------|----------|
 | 50% | Essential, needed to get something working. 15% is part of the mid-term submission, 35% is part of the final delivery.       | (^)      |
-| 20% | Nice-to-haves, not required to get something working. 10% is part of the mid-term submission, 10% is part of the final delivery.  | (^^)     |
-| 15% | Difficult, complex exercises             | (^^^)    |
+| 25% | Nice-to-haves, not required to get something working. 10% is part of the mid-term submission, 10% is part of the final delivery.  | (^^)     |
+| 20% | Difficult, complex exercises             | (^^^)    |
 | 5% | Advanced, challenges for diving deep. Choose one.       | (^^^^)   |
 
 ## Lab 1: Developer Setup
