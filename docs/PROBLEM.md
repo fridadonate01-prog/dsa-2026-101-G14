@@ -440,10 +440,10 @@ You **may** use AI to:
 - Summarize course material or external resources.
 - Test your understanding (e.g. “Why does this approach fail?”).
 - Debug errors and troubleshoot unexpected behavior.
-- Generate small, abstract examples (e.g. “How do I read query parameters in FastAPI?”)
+- Generate small, abstract examples (e.g. “How do I read a line from a file in C?”)
 
 You **may NOT** use AI to:
-- Generate complete solutions or large portions of your project code. (e.g. “Implement the /files endpoint for my HDFS system.”)
+- Generate complete solutions or large portions of your project code. (e.g. “Implement this exercise: ...”)
 - Use AI in agentic mode
 
 To ensure AI supports learning rather than replacing it, we will rely on the following:
