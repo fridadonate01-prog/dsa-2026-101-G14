@@ -11,7 +11,7 @@
 # Repository Contents
 
 - [Problem statement](./docs/PROBLEM.md): explanation of what you need to build and deliver
-- [Work log](./docs/WORK_LOG.md): log the work every member has worked on for each lab
+- [Work log](./WORK_LOG.md): log the work every member has worked on for each lab
 - [Developer setup](./docs/DEVELOPER_SETUP.md): how to configure your laptop for development for the DSA course
 - [Report](./docs/REPORT.md): document where you need to write your report
 - [.github/workflows/unit-tests.yml](./.github/workflows/unit-tests.yml): script to run tests when pushing to GitHub (CI)
