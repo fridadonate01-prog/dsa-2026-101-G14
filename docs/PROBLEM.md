@@ -339,7 +339,7 @@ To do so, you will need to implement:
 - Load all streets from the list into an intersection graph (the hashmap). (^)
 - Unit test the intersection hashmap. (^^^)
 
-## Lab 5: The path between two positions
+## Lab 6: The path between two positions
 
 - Ask the user for a destination (`coordinate`, `place` or `address`). (^)
 - Print the step by step directions from the source to the destination. (^)
