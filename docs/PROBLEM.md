@@ -206,7 +206,7 @@ We have divided all tasks into four categories so you can prioritize implementin
 | Weight               | Description                              | Symbol   |
 |----------------------|------------------------------------------|----------|
 | 50% | Essential, needed to get something working. 15% is part of the mid-term submission, 35% is part of the final delivery.       | (^)      |
-| 25% | Nice-to-haves, not required to get something working. 10% is part of the mid-term submission, 10% is part of the final delivery.  | (^^)     |
+| 25% | Nice-to-haves, not required to get something working. 10% is part of the mid-term submission, 15% is part of the final delivery.  | (^^)     |
 | 20% | Difficult, complex exercises             | (^^^)    |
 | 5% | Advanced, challenges for diving deep. Choose one.       | (^^^^)   |
 
@@ -285,6 +285,8 @@ You will need to implement:
 - Sequential search amongst the places linked list (^^)
 - To find similarly named places, use the [Levenshtein distance](#levenshtein-distance) and an adequate sorting algorithm. (^^^)
 - Unit test the places list. (^^^)
+
+Your progress up to this point should be delivered as part of the midterm submission.
 
 ## Lab 4: Finding connected streets
 
@@ -429,7 +431,7 @@ By the end of the project, every team must deliver:
 
 - Source code for the program in your GitHub repository. (40% of the labs grade)
   - This grade includes using GitHub branches, PRs and proper commit names.
-  - Part of this grade comes from the mid-term submission (labs 1-3) and the rest from the end of term submission (labs 4-6).
+  - Part of this grade comes from the mid-term submission (labs 1-3) and the rest from the end of term submission (labs 4-6). See [work breakdown](#work-breakdown) for details. 
 - [A report](#report). (10% of the labs grade)
 
 After each lab, there is a small individual test (10% of the labs grade). At the end of the project, we will also interview each member individually (40% of the labs grade). You must pass the interview to pass the labs.
