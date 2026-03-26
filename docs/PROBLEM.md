@@ -230,9 +230,6 @@ Complete the [developer setup](./DEVELOPER_SETUP.md) guide. Then, start with the
 ```
 Enter map name (e.g. 'xs_2' or 'xl_1'): xl_1
 71092 houses loaded
-21349 places loaded
-18828 streets loaded
-
 
 --- ORIGIN ---
 Where are you? Address (1), Place (2) or Coordinate (3)? 1
@@ -266,7 +263,6 @@ You will need to implement:
 Enter map name (e.g. 'xs_2' or 'xl_1'): xl_1
 71092 houses loaded
 21349 places loaded
-18828 streets loaded
 
 
 --- ORIGIN ---
