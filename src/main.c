@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include "houses.h"
 
 void createaleak() {
   char *foo = malloc(20 * sizeof(char));
@@ -10,13 +11,23 @@ void createaleak() {
 }
 
 int main() {
-  printf("*****************\nWelcome to DSA!\n*****************\n");
+    char map_name[50];
+    char file_path[100];
 
-  // how to import and call a function
-  printf("Factorial of 4 is %d\n", fact(4));
+    // Ask for map name
+    printf("Enter map name (e.g. 'xs_2' or 'xl_1'): ");
+    scanf("%s", map_name);
 
-  // uncomment and run "make v" to see how valgrind detects memory leaks
-  // createaleak();
+    // Construct path: assuming execution from 'src' folder
+    sprintf(file_path, "../maps/%s/houses.txt", map_name);
 
-  return 0;
+    House* my_houses = load_houses(file_path);
+
+    if (my_houses != NULL) {
+        find_address_logic(my_houses);
+    } else {
+        printf("Error: Could not load map data.\n");
+    }
+
+    return 0;
 }
