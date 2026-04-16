@@ -11,14 +11,14 @@ void createaleak() {
 }
 
 int main() {
-    char map_name[50];
-    char file_path[100];
+  // Array of string pointers
+  const char * maps[] = {"xs_1", "xs_2", "md_1", "lg_1", "xl_1", "2xl_1"}; 
+  
+  // Call the function and store the result
+  const char * map_name = choose_map(maps); 
+  char file_path[100];
 
-    // Ask for map name
-    printf("Enter map name (e.g. 'xs_2' or 'xl_1'): ");
-    scanf("%s", map_name);
-
-    // Construct path: assuming execution from 'src' folder
+// Construct path: assuming execution from 'src' folder
     sprintf(file_path, "../maps/%s/houses.txt", map_name);
 
     House* my_houses = load_houses(file_path);
