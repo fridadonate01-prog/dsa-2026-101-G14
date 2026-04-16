@@ -19,8 +19,7 @@ int main() {
   const char * chosen_map = choose_map(all_maps); 
   const char * chosen_input = choose_input (all_location_inputs);
 
-  printf("the chosen map is: %s\n",chosen_map);
-  printf("the chosen input is: %s\n",chosen_input);
+
 
   if (strcmp(chosen_input,"coordinate") == 0 || strcmp(chosen_input,"address") == 0){printf("Not implemented yet.\n");  }
 
