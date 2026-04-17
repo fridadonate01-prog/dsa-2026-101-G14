@@ -1,4 +1,4 @@
-#include "sample_lib.h"
+#include "input.h"
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>

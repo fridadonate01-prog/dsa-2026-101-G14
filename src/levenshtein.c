@@ -1,14 +1,11 @@
 #include "levenshtein.h"
-#include <stdlib.h>
 #include <string.h>
 int levenshtein_distance(char *input_str, char *database_str){
     int inp_len = strlen(input_str);
     int dat_len = strlen(database_str);
 
-    int **matrix = calloc(inp_len+1, sizeof(int*));
-    for (int i = 0; i < inp_len +1; i++){
-        matrix[i] = calloc(dat_len+1, sizeof(int));
-    }
+    int matrix[inp_len+1][dat_len+1];
+
 
     for (int i = 0; i < inp_len + 1; i++){
         matrix[i][0] = i;
@@ -26,8 +23,21 @@ int levenshtein_distance(char *input_str, char *database_str){
             else{
                 cost = 1;
             }
+            matrix[i][j] = min_three(matrix[i-1][j]+1, // deletion
+                matrix[i][j-1] + 1, // insertion
+                matrix[i-1][j-1] + cost // substitution
+            );
 
         }
     }
+    return matrix[inp_len][dat_len];
+
 
 }
+
+int min_three (int a, int b, int c){
+    if (a <= b && a <= c){return a;}
+    else if (b <= a && b <= c){return b;}
+    return c;
+}
+

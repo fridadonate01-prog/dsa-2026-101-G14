@@ -22,7 +22,7 @@ const char* choose_map(const char *maps[]) {
 }
 
 const char* choose_input(const char * all_location_inputs[]){
-  printf("--- ORIGIN ---");
+  printf("--- ORIGIN ---\n");
   int chosen_input; 
   char buffer[50];
   while (1) { 
