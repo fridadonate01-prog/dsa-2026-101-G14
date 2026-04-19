@@ -30,19 +30,16 @@ House* load_houses(const char* filename) {
 }
 
 // --- POINT 4: FIND ADDRESS LOGIC ---
-void find_address_logic(House* head) {
+void find_address_logic(House* head, int choice) {
     char search_street[100];
     int search_number;
 
     // Matching the example prompts exactly
-    printf("\n--- ORIGIN ---\n");
-    printf("Where are you? Address (1), Place (2) or Coordinate (3)? ");
-    int choice;
-    scanf("%d", &choice);
+
 
     if (choice == 1) {
         printf("Enter street name (e.g. \"Carrer de Roc Boronat\"): ");
-        getchar(); // Clear newline buffer
+
         fgets(search_street, sizeof(search_street), stdin);
         search_street[strcspn(search_street, "\n")] = 0; // Remove newline
 
@@ -52,6 +49,7 @@ void find_address_logic(House* head) {
         House* current = head;
         while (current != NULL) {
             // Case-insensitive comparison
+
             if (strcasecmp(current->street_name, search_street) == 0 && 
                 current->house_number == search_number) {
                 // Indented output to match the example

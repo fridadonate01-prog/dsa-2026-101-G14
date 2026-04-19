@@ -12,6 +12,6 @@ typedef struct House {
 // Infrastructure function
 House* load_houses(const char* filename);
 
-void find_address_logic(House* head);
+void find_address_logic(House* head, int choice);
 
 #endif
