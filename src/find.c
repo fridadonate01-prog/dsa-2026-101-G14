@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h> // Required for strcasecmp
-#include "houses.h"
+#include "find.h"
 
 // --- IMAGE IMPLEMENTATION: READING, PARSING, AND LINKED LIST ---
 House* load_houses(const char* filename) {
