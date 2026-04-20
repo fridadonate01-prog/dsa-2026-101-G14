@@ -4,30 +4,58 @@
 #include <strings.h> // Required for strcasecmp
 #include "find.h"
 
-// --- IMAGE IMPLEMENTATION: READING, PARSING, AND LINKED LIST ---
-House* load_houses(const char* filename) {
-    FILE* file = fopen(filename, "r");
-    if (!file) return NULL;
+//we need to get into the file and store houses in a linked list
+House* load_houses(const char* f){
+    FILE* file = fopen(f, "r");//open file to read it
+    if (file==NULL) return NULL;//if it cannot open it return null
 
+    //Let's create a linked list
     House* head = NULL;
-    int count = 0;
-    char line[256];
+    char line[256];//to store each line of file (house)
+    int houses=0; //counts houses
 
-    while (fgets(line, sizeof(line), file)) {
-        House* new_house = malloc(sizeof(House));
-        if (sscanf(line, "%[^,],%d,%lf,%lf", new_house->street_name, 
-                   &new_house->house_number, &new_house->lat, &new_house->lon) == 4) {
-            new_house->next = head;
-            head = new_house;
-            count++;
-        } else {
-            free(new_house);
+    while(fgets(line, 256,file)){//while there's a line...
+        House* newHouse= malloc(sizeof(House));
+        newHouse->lat=0;
+        newHouse->lon=0;
+        int info_count=0;//how many information we have separated from line
+
+
+        for (int i=0; line[i]!='\0'&& line[i]!='\n'; i++){
+            char current= line[i];
+
+            if (line[i]==','){
+                info_count++;
+            }
+
+            switch(info_count){
+                case 0:
+                    newHouse ->street_name[i]=current;
+                    break;
+                case 1:
+                    newHouse->house_number= current;
+                    break;
+                case 2: //we need lat
+                    sscanf(&line[i], "%lf", &newHouse->lat);
+            
+                    // Fast-forward 'i' past the decimal number
+                    while (isdigit(line[i+1]) || line[i+1] == '.') i++;
+                    break;
+                case 3:
+                    sscanf(&line[i], "%lf", &newHouse->lon);
+            
+                    // Fast-forward 'i' past the decimal number
+                    while (isdigit(line[i+1]) || line[i+1] == '.' || line[i+1] == '-') i++;
+                    break;
+            }
         }
+    newHouse->next = head;
+    head= newHouse;
     }
-    printf("%d houses loaded\n", count); // Matches example output
     fclose(file);
     return head;
 }
+
 
 // --- POINT 4: FIND ADDRESS LOGIC ---
 void find_address_logic(House* head, int choice) {

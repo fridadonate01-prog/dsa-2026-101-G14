@@ -7,7 +7,7 @@ typedef struct House { //Each house has: street_name, house_number, lat and lon.
     double lat;
     double lon;
     struct House* next; //Pointer to the next house
-} House;
+} House; 
 
 // Infrastructure function
 House* load_houses(const char* filename);
