@@ -3,6 +3,7 @@
 #include <string.h>
 #include <strings.h> // Required for strcasecmp
 #include "find.h"
+#include "streets_utils.h"
 
 //we need to get into the file and store houses in a linked list
 House* load_houses(const char* f){
@@ -83,13 +84,25 @@ void find_address_logic(House* head, int choice) {
         //Sequential search to find the house
         House* current = head;//current house pointer
         while (current != NULL) { 
-            if (strcasecmp(search_street,current->street_name)==0 && current->house_number==search_number){
-                printf("Found at (%f, %f)\n", current->lat, current->lon);
+            // 1. Declare buffers to store normalized names
+            char norm_input[100];
+            char norm_street[100];
+
+            // 2. Normalize both the user input and the list entry
+            normalizeStreetName(norm_input, input_name);
+            normalizeStreetName(norm_street, street->name);
+
+            // 3. Compare the normalized versions   
+            if (strcmp(norm_input, norm_street) == 0) {
+                if (strcasecmp(search_street,current->street_name)==0 && current->house_number==search_number){
+                    printf("Found at (%f, %f)\n", current->lat, current->lon);
                 return;
             }
             current= current->next; //not found, so look for the next
 
-        }
+            }
+            }
+            
 
         //finished all houses and didn't find it:
         printf("Address not found. \n"); 
