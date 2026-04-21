@@ -13,7 +13,6 @@ House* load_houses(const char* f){
     //Let's create a linked list
     House* head = NULL;
     char line[256];//to store each line of file (house)
-    int houses=0; //counts houses
 
     while(fgets(line, 256,file)){//while there's a line...
         House* newHouse= malloc(sizeof(House));
@@ -35,7 +34,7 @@ House* load_houses(const char* f){
             switch(info_count){
                 case 0:
                     newHouse ->street_name[j++]=current;
-                    newHouse->street_name[j]= '\n';
+                    newHouse->street_name[j]= '\0'; //'\0' because it's the sign for the end of a string 
                     break;
                 case 1://house number
                     sscanf(&line[i], "%d", &newHouse->house_number);

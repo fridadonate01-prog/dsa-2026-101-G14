@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include "find.h"
-#include <string.h>
 
 void createaleak() {
   char *foo = malloc(20 * sizeof(char));
