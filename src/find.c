@@ -57,35 +57,58 @@ House* load_houses(const char* f){
 }
 
 
-// --- POINT 4: FIND ADDRESS LOGIC ---
+//Find and print coordinates
 void find_address_logic(House* head, int choice) {
     char search_street[100];
     int search_number;
 
-    // Matching the example prompts exactly
-    if (choice == 1) {
+    if (choice == 1) {//chose address
         printf("Enter street name (e.g. \"Carrer de Roc Boronat\"): ");
 
         fgets(search_street, sizeof(search_street), stdin);
-        search_street[strcspn(search_street, "\n")] = 0; // Remove newline
+            // Remove the newline character from the string
+            search_street[strcspn(search_street, "\n")] = 0;
 
-        printf("Enter street number (e.g. \"138\"): ");
-        scanf("%d", &search_number);
 
-        House* current = head;
-        while (current != NULL) {
-            // Case-insensitive comparison
+        printf("Enter street number: ");
+        if (scanf("%d", &search_number) != 1) {
+            printf("Invalid number input.\n");
+            return;
+        }
 
-            if (strcasecmp(current->street_name, search_street) == 0 && 
-                current->house_number == search_number) {
-                // Indented output to match the example
-                printf("\n    Found at (%f, %f)\n", current->lat, current->lon);
+        //Sequential search to find the house
+        House* current = head;//current house pointer
+        while (current != NULL) { 
+            if (strcmp(search_street, current->street_name)==0 && current->house_number==search_number){
+                printf("Found at (%f, %f)\n", current->lat, current->lon);
                 return;
             }
-            current = current->next;
+            current= current->next; //not found, so look for the next
+
         }
-        printf("\n    Address not found.\n");
-    } else {
+
+        //finished all houses and didn't find it:
+        printf("Address not found. \n"); 
+
+    } else {//it didn't choose address
         printf("Not implemented yet.\n");
     }
 }
+
+
+
+
+
+
+
+
+
+           //if (strcasecmp(current->street_name, search_street) == 0 && 
+                //current->house_number == search_number) {
+                // Indented output to match the example
+                //printf("\n    Found at (%f, %f)\n", current->lat, current->lon);
+                //return;
+            //}
+            //current = current->next;
+        //}
+        //printf("\n    Address not found.\n");
