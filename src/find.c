@@ -35,6 +35,7 @@ House* load_houses(const char* f){
             switch(info_count){
                 case 0:
                     newHouse ->street_name[j++]=current;
+                    newHouse->street_name[j]= '\n';
                     break;
                 case 1://house number
                     sscanf(&line[i], "%d", &newHouse->house_number);
@@ -99,6 +100,8 @@ void find_address (House* head){
         printf("Invalid number input.\n");
         return;
         }
+    // Clear the buffer so the next fgets works correctly
+    while (getchar() != '\n');
 
     //Sequential search to find the house
     House* current = head;//current house pointer
@@ -113,7 +116,7 @@ void find_address (House* head){
 
     //finished all houses and didn't find it:
     printf("Address not found. \n"); 
-}
+}//it prints the coordinates based on address
 
 void find_place(Place* head) {
     char search_place[100];
@@ -135,4 +138,4 @@ void find_place(Place* head) {
     //finished all places and didn't find it:
     printf("Place not found. \n"); 
 
-}
+}//it prints the coordinates based on place

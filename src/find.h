@@ -1,5 +1,5 @@
-#ifndef HOUSES_H
-#define HOUSES_H
+#ifndef FIND_H
+#define FIND_H
 
 typedef struct House { //Each house has: street_name, house_number, lat and lon.
     char street_name[100];
@@ -17,4 +17,11 @@ typedef struct Place{
     double longitude;
     struct Place *next;
 } Place;
+
+//DECLARATIONS:
+House* load_houses(const char* f);
+Place* load_places(const char* f);
+void find_address(House* head);
+void find_place(Place* head);
+
 #endif
