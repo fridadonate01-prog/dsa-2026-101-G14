@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-#include "houses.h"
+#include "find.h"
 #include <string.h>
 
 void createaleak() {
@@ -19,7 +19,6 @@ int main() {
   // Call the function and store the result
   int chosen_map = choose_map(all_maps); 
   int chosen_input = choose_input ();
-
 
 
   if ( chosen_input == 2 || chosen_input == 3){printf("Not implemented yet.\n");  }
