@@ -129,7 +129,7 @@ void find_place(Place* head) {
     Place *current= head;
     while(current!=NULL){
         if (strcasecmp(search_place,current->name)==0){
-            printf("Found at (%f, %f)", current->latitude, current->longitude);
+            printf("Found at (%f, %f)\n", current->latitude, current->longitude);
             return;
         }
         current= current->next;
