@@ -19,6 +19,7 @@ House* load_houses(const char* f){
         newHouse->lat=0;
         newHouse->lon=0;
         int info_count=0;//how many information we have separated from line
+        int j = 0; // Local index for the street_name array
 
 
         for (int i=0; line[i]!='\0'&& line[i]!='\n'; i++){
@@ -26,25 +27,24 @@ House* load_houses(const char* f){
 
             if (line[i]==','){
                 info_count++;
+                j=0; //reset index
+                continue; //skip the comma
             }
 
             switch(info_count){
                 case 0:
-                    newHouse ->street_name[i]=current;
+                    newHouse ->street_name[j++]=current;
                     break;
-                case 1:
-                    newHouse->house_number= current;
+                case 1://house number
+                    sscanf(&line[i], "%d", &newHouse->house_number);
+                    while (isdigit(line[i+1])) i++; // Fast-forward
                     break;
                 case 2: //we need lat
                     sscanf(&line[i], "%lf", &newHouse->lat);
-            
-                    // Fast-forward 'i' past the decimal number
                     while (isdigit(line[i+1]) || line[i+1] == '.') i++;
                     break;
                 case 3:
                     sscanf(&line[i], "%lf", &newHouse->lon);
-            
-                    // Fast-forward 'i' past the decimal number
                     while (isdigit(line[i+1]) || line[i+1] == '.' || line[i+1] == '-') i++;
                     break;
             }
@@ -53,7 +53,7 @@ House* load_houses(const char* f){
     head= newHouse;
     }
     fclose(file);
-    return head;
+    return head; //it returns a pointer to the first house
 }
 
 
@@ -63,8 +63,6 @@ void find_address_logic(House* head, int choice) {
     int search_number;
 
     // Matching the example prompts exactly
-
-
     if (choice == 1) {
         printf("Enter street name (e.g. \"Carrer de Roc Boronat\"): ");
 
