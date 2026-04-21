@@ -5,4 +5,5 @@
 int fact(int n);
 int choose_map(const char *maps[]);
 int choose_input();
+
 #endif

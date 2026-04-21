@@ -56,6 +56,10 @@ House* load_houses(const char* f){
     return head; //it returns a pointer to the first house
 }
 
+void cleaninput(char* search_street){//handles abbreviations
+    
+
+}
 
 //Find and print coordinates
 void find_address_logic(House* head, int choice) {
@@ -79,7 +83,7 @@ void find_address_logic(House* head, int choice) {
         //Sequential search to find the house
         House* current = head;//current house pointer
         while (current != NULL) { 
-            if (strcmp(search_street, current->street_name)==0 && current->house_number==search_number){
+            if (strcasecmp(search_street,current->street_name)==0 && current->house_number==search_number){
                 printf("Found at (%f, %f)\n", current->lat, current->lon);
                 return;
             }
@@ -95,20 +99,26 @@ void find_address_logic(House* head, int choice) {
     }
 }
 
+//we need to get into the file and store places in a linked list
+Place* load_places(const char* f){
+    FILE *file = fopen(f,"r");
+    if (file == NULL) return NULL; //if the file cannot be opened
+    char line[256];
 
+    Place *head=NULL;
 
+    //Read the string and store its info in a new Place 
+    while(fgets(line, sizeof(line), file)){
+        Place *newp = malloc(sizeof(Place));
+        int filled= sscanf(line, "%[^,],%[^,],%[^,],%lf,%lf", newp->id, newp->name, newp->category, &newp->latitude, &newp->longitude);
 
-
-
-
-
-
-           //if (strcasecmp(current->street_name, search_street) == 0 && 
-                //current->house_number == search_number) {
-                // Indented output to match the example
-                //printf("\n    Found at (%f, %f)\n", current->lat, current->lon);
-                //return;
-            //}
-            //current = current->next;
-        //}
-        //printf("\n    Address not found.\n");
+        if (filled==5){ //it successfully added all info to a new Place
+            newp->next=head;
+            head= newp;
+        } else{
+            free(newp);//if it couldn't be loaded free the space
+        }
+    }
+    fclose(file);
+    return head; //returns the pointer to the first position of the linked list of places.
+}

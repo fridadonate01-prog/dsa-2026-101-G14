@@ -1,4 +1,4 @@
-#include "../src/sample_lib.h"
+#include "../src/input.h"
 #include "utils.h"
 
 void test_fact4() {
