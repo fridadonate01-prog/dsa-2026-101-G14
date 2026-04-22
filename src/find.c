@@ -10,101 +10,31 @@
 //we need to get into the file and store houses in a linked list
 House* load_houses(const char* f){
     FILE* file = fopen(f, "r");//open file to read it
-    if (file==NULL) return NULL;//if it cannot open it return null
+    if (file==NULL){
+        return NULL;//if it couldn't be opened
+    } 
 
     //Let's create a linked list
     House* head = NULL;
     char line[256];//to store each line of file (house)
 
-    while(fgets(line, 256,file)){//while there's a line...
-        House* newHouse= malloc(sizeof(House));
-        newHouse->lat=0;
-        newHouse->lon=0;
-        int info_count=0;//how many information we have separated from line
-        int j = 0; // Local index for the street_name array
+    while (fgets(line, sizeof(line), file)) {
+    House* newHouse = malloc(sizeof(House));
+    if (!newHouse) break;
 
-
-        for (int i=0; line[i]!='\0'&& line[i]!='\n'; i++){
-            char current= line[i];
-
-            if (line[i]==','){
-                info_count++;
-                j=0; //reset index
-                continue; //skip the comma
-            }
-
-            switch(info_count){
-                case 0:
-                    newHouse ->street_name[j++]=current;
-                    newHouse->street_name[j]= '\0'; //'\0' because it's the sign for the end of a string 
-                    break;
-                case 1://house number
-                    sscanf(&line[i], "%d", &newHouse->house_number);
-                    while (isdigit(line[i+1])) i++; // Fast-forward
-                    break;
-                case 2: //we need lat
-                    sscanf(&line[i], "%lf", &newHouse->lat);
-                    while (isdigit(line[i+1]) || line[i+1] == '.') i++;
-                    break;
-                case 3:
-                    sscanf(&line[i], "%lf", &newHouse->lon);
-                    while (isdigit(line[i+1]) || line[i+1] == '.' || line[i+1] == '-') i++;
-                    break;
-            }
-        }
-    newHouse->next = head;
-    head= newHouse;
+    int filled= sscanf(line, "%[^,],%d,%lf,%lf", newHouse->street_name, &newHouse->house_number, &newHouse->lat, &newHouse->lon);
+    
+    if (filled==4){//it was access and stored
+        newHouse->next = head;//we link it to the list
+        head = newHouse;
+    } else {
+        free(newHouse); // free memory if errors occured
     }
+}
     fclose(file);
     return head; //it returns a pointer to the first house
 }
-//Find and print coordinates
-void find_address_logic(House* head, int choice) {
-    char search_street[100];
-    int search_number;
 
-    if (choice == 1) {//chose address
-        printf("Enter street name (e.g. \"Carrer de Roc Boronat\"): ");
-
-        fgets(search_street, sizeof(search_street), stdin);
-            // Remove the newline character from the string
-            search_street[strcspn(search_street, "\n")] = 0;
-
-
-        printf("Enter street number: ");
-        if (scanf("%d", &search_number) != 1) {
-            printf("Invalid number input.\n");
-            return;
-        }
-
-        //Sequential search to find the house
-        House* current = head;//current house pointer
-        while (current != NULL) { 
-            // 1. Declare buffers to store normalized names
-            char norm_input[100];
-            char norm_street[100];
-
-            // 2. Normalize both the user input and the list entry
-            normalizeStreetName(norm_input, search_street);
-            normalizeStreetName(norm_street, current->street_name);
-
-            // 3. Compare the normalized versions   
-            if (strcasecmp(norm_input, norm_street) == 0 && current->house_number==search_number) {
-                printf("Found at (%f, %f)\n", current->lat, current->lon);
-                return;
-            }
-            current= current->next; //not found, so look for the next
-            }
-            }
-            
-
-        //finished all houses and didn't find it:
-        printf("Address not found. \n"); 
-
-    } else {//it didn't choose address
-        printf("Not implemented yet.\n");
-    }
-}
 //we need to get into the file and store places in a linked list
 Place* load_places(const char* f){
     FILE *file = fopen(f,"r");
@@ -116,6 +46,8 @@ Place* load_places(const char* f){
     //Read the string and store its info in a new Place 
     while(fgets(line, sizeof(line), file)){
         Place *newp = malloc(sizeof(Place));
+        if (!newp) break; //if malloc returned NULL
+
         int filled= sscanf(line, "%[^,],%[^,],%[^,],%lf,%lf", newp->id, newp->name, newp->category, &newp->latitude, &newp->longitude);
 
         if (filled==5){ //it successfully added all info to a new Place
@@ -140,7 +72,7 @@ void find_address (House* head){
         // Remove the newline character from the string
         search_street[strcspn(search_street, "\n")] = 0;
 
-    while (1){ //untill we find a match
+    while (1){ //until we find a match
         printf("Enter street number: ");
         if (scanf("%d", &search_number) != 1) {
             printf("Invalid number input.\n");
@@ -152,32 +84,39 @@ void find_address (House* head){
         //Sequential search to find the house
         House* current = head;//current house pointer
         int street_found = 0; // to check if we find the street, but not the number
-        while (current != NULL) { 
-            if (strcasecmp(search_street,current->street_name)==0 && current->house_number==search_number){
+        while (current != NULL) {
+            // 1. Declare buffers to store normalized names
+            char norm_input[256];
+            char norm_street[256]; 
+            
+            // 2. Normalize both the user input and the list street
+            normalizeStreetName(norm_input, search_street);
+            normalizeStreetName(norm_street, current->street_name);
+
+            if (strcasecmp(norm_input, norm_street)==0 && current->house_number==search_number){
                 printf("Found at (%f, %f)\n", current->lat, current->lon);
                 return;
             }
-            else if(strcasecmp(search_street,current->street_name)==0){ // same street, not same number!
+            else if(strcasecmp(norm_input,norm_street)==0){ // same street, not same number!
                 street_found = 1;
             }
             current= current->next; //not found, so look for the next
-
         }
         int choice = 0;
-        if (street_found == 1){
+        if (street_found == 1){//but not number
             printf("the street name is correct, but the number is not valid.\n");
             printf("You have 2 options:\n");
-            printf("1. Change the number to check if the adress exists.\n");
-            printf("2. Change the street name, hoping it holds your correct number adress.\n");
+            printf("1. Change the number to check if the address exists.\n");
+            printf("2. Change the street name, hoping it holds your correct number address.\n");
             choice = option_menu(1, 2);
-
         }
         if (choice == 2 || street_found == 0) {
             strcpy(search_street, similar_streets(search_street,head));
         }
     }
-}//it prints the coordinates based on address
+}
 
+//Prints the coordinates based on place
 void find_place(Place* head) {
     char search_place[100];
 
@@ -198,4 +137,4 @@ void find_place(Place* head) {
     //finished all places and didn't find it:
     printf("Place not found. \n"); 
 
-}//it prints the coordinates based on place
+}
