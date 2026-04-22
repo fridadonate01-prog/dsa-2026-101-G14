@@ -1,5 +1,6 @@
 #include "levenshtein.h"
 #include "find.h"
+#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 int levenshtein_distance(char *input_str, char *database_str){
@@ -19,7 +20,7 @@ int levenshtein_distance(char *input_str, char *database_str){
     for (int i = 1; i < inp_len + 1; i++){
         for (int j = 1; j < dat_len + 1; j++){
 
-            if (input_str[i-1]==database_str[j-1]){
+            if (tolower(input_str[i-1])==tolower(database_str[j-1])){
                 cost = 0; 
             }
             else{
@@ -86,14 +87,32 @@ char * similar_streets(char *inp_string, House *head){
             current = current->next;
 
         }
-            printf("\nThat street name is not known! Did you mean...\n");
-            for (int i = 0; i < num_options; i++){ 
-                printf("  %d. %s\n", i+1, similar_options[i].name);
-            }
-            printf("  0. !! None of these, let me type again !!\n");
+        printf("\nThat street name is not known! Did you mean...\n");
+        for (int i = 0; i < num_options; i++){ 
+            printf("  %d. %s\n", i+1, similar_options[i].name);
+        }
+        printf("  0. !! None of these, let me type again !!\n");
 
+        int choice = option_menu(0,num_options);
+
+        if (choice >= 1 && choice <= num_options) {
+        
+            return strdup(similar_options[choice-1].name); 
+
+        } else if (choice == 0) {
+            printf("Enter the new street name: ");
+            fgets(current_search, sizeof(current_search), stdin);
+            current_search[strcspn(current_search, "\n")] = 0; // Quitar el '\n' maldito
+
+        } 
+    }
+
+}
+
+int option_menu(int low_lim, int high_lim){
+    while (1){
             int choice;
-            printf("\nChoose an option (0-%d): ", num_options);
+            printf("\nChoose an option (%d-%d): ",low_lim, high_lim);
             
             if (scanf("%d", &choice) != 1) {
                 while (getchar() != '\n'); // Limpiar buffer si mete letras
@@ -102,18 +121,14 @@ char * similar_streets(char *inp_string, House *head){
             }
             while (getchar() != '\n'); // Limpiar el salto de línea del scanf
 
-            if (choice >= 1 && choice <= num_options) {
+            if (choice >= low_lim && choice <= high_lim) {
             
-                return strdup(similar_options[choice-1].name); 
+                return choice; 
 
-            } else if (choice == 0) {
-                printf("Enter the new street name: ");
-                fgets(current_search, sizeof(current_search), stdin);
-                current_search[strcspn(current_search, "\n")] = 0; // Quitar el '\n' maldito
-
-            } else {
+            } 
+            else {
                 printf("Invalid choice. Try again.\n");
         }
     }
-
+        
 }

@@ -4,6 +4,7 @@
 #include <strings.h> // Required for strcasecmp
 #include "find.h"
 #include <ctype.h>
+#include "levenshtein.h"
 
 //we need to get into the file and store houses in a linked list
 House* load_houses(const char* f){
@@ -84,7 +85,7 @@ Place* load_places(const char* f){
 
 //Find and print coordinates if it chose address (1)
 void find_address (House* head){
-    char search_street[100];
+    char search_street[256];
     int search_number;
 
     printf("Enter street name (e.g. \"Carrer de Roc Boronat\"): ");
@@ -93,28 +94,42 @@ void find_address (House* head){
         // Remove the newline character from the string
         search_street[strcspn(search_street, "\n")] = 0;
 
-
-    printf("Enter street number: ");
-    if (scanf("%d", &search_number) != 1) {
-        printf("Invalid number input.\n");
-        return;
-        }
-    // Clear the buffer so the next fgets works correctly
-    while (getchar() != '\n');
-
-    //Sequential search to find the house
-    House* current = head;//current house pointer
-    while (current != NULL) { 
-        if (strcasecmp(search_street,current->street_name)==0 && current->house_number==search_number){
-            printf("Found at (%f, %f)\n", current->lat, current->lon);
+    while (1){ //untill we find a match
+        printf("Enter street number: ");
+        if (scanf("%d", &search_number) != 1) {
+            printf("Invalid number input.\n");
             return;
+            }
+        // Clear the buffer so the next fgets works correctly
+        while (getchar() != '\n');
+
+        //Sequential search to find the house
+        House* current = head;//current house pointer
+        int street_found = 0; // to check if we find the street, but not the number
+        while (current != NULL) { 
+            if (strcasecmp(search_street,current->street_name)==0 && current->house_number==search_number){
+                printf("Found at (%f, %f)\n", current->lat, current->lon);
+                return;
+            }
+            else if(strcasecmp(search_street,current->street_name)==0){ // same street, not same number!
+                street_found = 1;
+            }
+            current= current->next; //not found, so look for the next
+
         }
-        current= current->next; //not found, so look for the next
+        int choice = 0;
+        if (street_found == 1){
+            printf("the street name is correct, but the number is not valid.\n");
+            printf("You have 2 options:\n");
+            printf("1. Change the number to check if the adress exists.\n");
+            printf("2. Change the street name, hoping it holds your correct number adress.\n");
+            choice = option_menu(1, 2);
 
+        }
+        if (choice == 2 || street_found == 0) {
+            strcpy(search_street, similar_streets(search_street,head));
+        }
     }
-
-    //finished all houses and didn't find it:
-    printf("Address not found. \n"); 
 }//it prints the coordinates based on address
 
 void find_place(Place* head) {
