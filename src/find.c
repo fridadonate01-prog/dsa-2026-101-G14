@@ -118,23 +118,25 @@ void find_address (House* head){
 
 //Prints the coordinates based on place
 void find_place(Place* head) {
-    char search_place[100];
+    char search_place[256];
 
     printf("Enter place name (e.g. Universitat Pompeu Fabra-Campus del Poblenou or L'Illa Diagonal): ");
     fgets(search_place, sizeof(search_place), stdin);
         // Remove the newline character from the string
         search_place[strcspn(search_place, "\n")] = 0;
     
-    //Sequential search
-    Place *current= head;
-    while(current!=NULL){
-        if (strcasecmp(search_place,current->name)==0){
-            printf("Found at (%f, %f)\n", current->latitude, current->longitude);
-            return;
+    while (1) {
+        //Sequential search
+        Place *current= head;
+        while(current!=NULL){
+            if (strcasecmp(search_place,current->name)==0){
+                printf("Found at (%f, %f)\n", current->latitude, current->longitude);
+                return;
+            }
+            current= current->next;
         }
-        current= current->next;
+        
+        //finished all places and didn't find it:
+        strcpy(search_place, similar_places(search_place, head));
     }
-    //finished all places and didn't find it:
-    printf("Place not found. \n"); 
-
 }

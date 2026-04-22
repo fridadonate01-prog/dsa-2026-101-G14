@@ -8,3 +8,4 @@ typedef struct {
 } Options;
 char * similar_streets(char *inp_string, House *head);
 int option_menu(int low_lim, int high_lim);
+char * similar_places(char *inp_string, Place *head);

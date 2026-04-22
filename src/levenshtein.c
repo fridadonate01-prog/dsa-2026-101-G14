@@ -136,3 +136,77 @@ int option_menu(int low_lim, int high_lim){
     }
         
 }
+
+
+char * similar_places(char *inp_string, Place *head){
+    int num_options = 5;
+    char current_search[256];
+    strcpy(current_search, inp_string);
+    
+    while (1){
+        Options similar_options[num_options];
+        for (int i = 0; i < num_options; i++){
+            similar_options[i].distance = 10000; 
+            strcpy(similar_options[i].name, "...................");
+        }
+
+        Place * current = head;
+        while(current != NULL){
+            int is_clon = 0; 
+            for (int k = 0; k < num_options; k++){
+                if (strcasecmp(similar_options[k].name, current->name) == 0){
+                    is_clon = 1;
+                    break;
+                }
+            }
+            if (is_clon == 0){
+                int current_levenshtein_dist = levenshtein_distance(current_search, current->name);
+                
+                if (current_levenshtein_dist == 0) {
+                    return strdup(current->name);
+                }
+
+                if (current_levenshtein_dist < similar_options[num_options-1].distance){ 
+                    for (int i = 0; i < num_options; i++){
+                        if (current_levenshtein_dist < similar_options[i].distance){ 
+                            for (int j = num_options-1; j > i; j--){ 
+                                similar_options[j].distance = similar_options[j-1].distance;
+                                strcpy(similar_options[j].name, similar_options[j-1].name);
+                            }
+                            strcpy(similar_options[i].name, current->name); 
+                            similar_options[i].distance = current_levenshtein_dist; 
+                            break;
+                        }
+                    }
+                }
+            }
+            current = current->next;
+        }
+
+        printf("\nThat place name is not known! Did you mean...\n");
+        for (int i = 0; i < num_options; i++){ 
+            printf("  %d. %s\n", i+1, similar_options[i].name);
+        }
+        printf("  0. !! None of these, let me type again !!\n");
+
+        int choice;
+        printf("\nChoose an option (0-%d): ", num_options);
+        
+        if (scanf("%d", &choice) != 1) {
+            while (getchar() != '\n'); 
+            printf("Invalid input. Please enter a number.\n");
+            continue; 
+        }
+        while (getchar() != '\n'); 
+
+        if (choice >= 1 && choice <= num_options) {
+            return strdup(similar_options[choice-1].name); 
+        } else if (choice == 0) {
+            printf("Enter the new place name: ");
+            fgets(current_search, sizeof(current_search), stdin);
+            current_search[strcspn(current_search, "\n")] = 0; 
+        } else {
+            printf("Invalid choice. Try again.\n");
+        }
+    }
+}
