@@ -11,6 +11,7 @@
 House* load_houses(const char* f){
     FILE* file = fopen(f, "r");//open file to read it
     if (file==NULL){
+        printf("Couldn't open file %s.\n", f);
         return NULL;//if it couldn't be opened
     } 
 
@@ -38,7 +39,10 @@ House* load_houses(const char* f){
 //we need to get into the file and store places in a linked list
 Place* load_places(const char* f){
     FILE *file = fopen(f,"r");
-    if (file == NULL) return NULL; //if the file cannot be opened
+    if (file == NULL) {
+        printf("Couldn't open file %s.\n", f);
+        return NULL;
+     } //if the file cannot be opened
     char line[256];
 
     Place *head=NULL;
