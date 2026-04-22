@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-#include "houses.h"
-#include <string.h>
+#include "find.h"
 
 void createaleak() {
   char *foo = malloc(20 * sizeof(char));
@@ -18,24 +17,26 @@ int main() {
   
   // Call the function and store the result
   int chosen_map = choose_map(all_maps); 
-  int chosen_input = choose_input ();
-
-
-
-  if ( chosen_input == 2 || chosen_input == 3){printf("Not implemented yet.\n");  }
+  int chosen_input = choose_input (); //input has the choice number
 
   char file_path[100];
+  if (chosen_input==1){//the user chose address
+    // Construct path: assuming execution from 'src' folder
+    sprintf(file_path, "maps/%s/houses.txt", all_maps[chosen_map]);//file path contains the name of the file path to the houses
 
-// Construct path: assuming execution from 'src' folder
-    sprintf(file_path, "maps/%s/houses.txt", all_maps[chosen_map]);
+    House* my_houses = load_houses(file_path); //pointer to the first house
 
-    House* my_houses = load_houses(file_path);
+    find_address(my_houses);
+  } else if(chosen_input==2){//the user chose place
+    //Construct path: assuming execution form 'src' folder
+    sprintf(file_path,"maps/%s/places.txt", all_maps[chosen_map]);//file path contains the name of the file path to the places
 
-    if (my_houses != NULL) {
-        find_address_logic(my_houses, chosen_input);
-    } else {
-        printf("Error: Could not load map data.\n");
-    }
+    Place* my_places= load_places(file_path); //pointer to the first place
+
+    find_place(my_places);
+  } else{
+    printf("Not implemented yet. \n");
+  }
 
     return 0;
 }
