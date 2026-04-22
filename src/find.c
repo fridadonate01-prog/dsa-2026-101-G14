@@ -57,11 +57,6 @@ House* load_houses(const char* f){
     return head; //it returns a pointer to the first house
 }
 
-void cleaninput(char* search_street){//handles abbreviations
-    
-
-}
-
 //Find and print coordinates
 void find_address_logic(House* head, int choice) {
     char search_street[100];
@@ -89,17 +84,15 @@ void find_address_logic(House* head, int choice) {
             char norm_street[100];
 
             // 2. Normalize both the user input and the list entry
-            normalizeStreetName(norm_input, input_name);
-            normalizeStreetName(norm_street, street->name);
+            normalizeStreetName(norm_input, search_street);
+            normalizeStreetName(norm_street, current->street_name);
 
             // 3. Compare the normalized versions   
-            if (strcmp(norm_input, norm_street) == 0) {
-                if (strcasecmp(search_street,current->street_name)==0 && current->house_number==search_number){
-                    printf("Found at (%f, %f)\n", current->lat, current->lon);
+            if (strcasecmp(norm_input, norm_street) == 0 && current->house_number==search_number) {
+                printf("Found at (%f, %f)\n", current->lat, current->lon);
                 return;
             }
             current= current->next; //not found, so look for the next
-
             }
             }
             
