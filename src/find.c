@@ -3,12 +3,9 @@
 #include <string.h>
 #include <strings.h> // Required for strcasecmp
 #include "find.h"
-<<<<<<< HEAD
-#include "streets_utils.h"
-=======
 #include <ctype.h>
+#include "streets_utils.h"
 #include "levenshtein.h"
->>>>>>> b9c40122e50285f0221b2c9fbe9e4fede8f2f061
 
 //we need to get into the file and store houses in a linked list
 House* load_houses(const char* f){
@@ -61,8 +58,6 @@ House* load_houses(const char* f){
     fclose(file);
     return head; //it returns a pointer to the first house
 }
-
-<<<<<<< HEAD
 //Find and print coordinates
 void find_address_logic(House* head, int choice) {
     char search_street[100];
@@ -110,9 +105,6 @@ void find_address_logic(House* head, int choice) {
         printf("Not implemented yet.\n");
     }
 }
-=======
->>>>>>> b9c40122e50285f0221b2c9fbe9e4fede8f2f061
-
 //we need to get into the file and store places in a linked list
 Place* load_places(const char* f){
     FILE *file = fopen(f,"r");
