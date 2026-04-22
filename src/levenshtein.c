@@ -66,6 +66,10 @@ char * similar_streets(char *inp_string, House *head){
             }
             if (is_clon == 0){
                 int current_levenshtein_dist = levenshtein_distance(current_search, current->street_name);
+                if (current_levenshtein_dist == 0) { //we found a perfect match
+                    printf("the street you wrote has an exact match! (%s).\n",current->street_name );
+                    return strdup(current->street_name); //return this directly
+                }
                 if (current_levenshtein_dist < similar_options[num_options-1].distance){ // the distance is lower than the last option (lowest match)
                     for (int i = 0; i < num_options; i++){
                         if (current_levenshtein_dist < similar_options[i].distance){ // we check in order to make an order of match
