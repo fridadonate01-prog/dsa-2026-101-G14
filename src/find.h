@@ -1,5 +1,6 @@
 #ifndef FIND_H
 #define FIND_H
+#define MAX_ID 1000 //revisar
 
 typedef struct House { //Each house has: street_name, house_number, lat and lon.
     char street_name[100];
@@ -17,6 +18,19 @@ typedef struct Place{
     double longitude;
     struct Place *next;
 } Place;
+
+typedef struct {
+    double lat;
+    double lon;
+} Node;
+
+typedef struct Street{
+    int start_id;
+    int end_id;
+    int length;
+    char street_name[100];
+    struct Street *next;
+} Street;
 
 //DECLARATIONS:
 House* load_houses(const char* f);

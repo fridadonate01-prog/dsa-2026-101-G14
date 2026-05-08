@@ -144,3 +144,39 @@ void find_place(Place* head) {
         strcpy(search_place, similar_places(search_place, head));
     }
 }
+
+void load_streets(const char* f){
+    FILE* file= fopen(f, "r");
+    if (file==NULL){
+        return;
+    }
+    char line[256];
+    Street *head= NULL;
+    int max_id=0;
+    double lat1, lon1, lat2, lon2;
+
+    Node nodes[10^100000000];
+    
+
+    while (fgets(line, sizeof(line),file)){
+      Street* new_street= malloc(sizeof(Street));
+      if (new_street==NULL) break;
+      int filled = sscanf("%d, %lf, %lf, %d, %lf, %lf, %d, %[^,]", new_street->start_id,lat1,lon1,new_street->end_id,lat2,lon2,new_street->street_name);
+      if (filled==8){
+        if (new_street->start_id>max_id){
+            max_id=new_street->start_id;
+        }
+        if (new_street->end_id>max_id){
+            max_id=new_street->end_id;
+        }
+        nodes[new_street->start_id].lat=lat1;
+        nodes[new_street->start_id].lon=lon1;
+        nodes[new_street->end_id].lat=lat2;
+        nodes[new_street->end_id].lon=lon2;
+        new_street->next= head;
+        head = new_street;
+      }
+    }
+    Node *intersections=malloc(sizeof(Node)*max_id);//dynamic array where each element is a node
+
+}
