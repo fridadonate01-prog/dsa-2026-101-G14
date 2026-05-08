@@ -152,22 +152,25 @@ void load_streets(const char* f){
     }
     char line[256];
     Street *head= NULL;
-    int max_id=0;
     double lat1, lon1, lat2, lon2;
 
-    Node nodes[10^100000000];
+    int current_capacity= 1000;
+    Node* nodes=malloc(current_capacity*sizeof(Node));
     
-
     while (fgets(line, sizeof(line),file)){
       Street* new_street= malloc(sizeof(Street));
       if (new_street==NULL) break;
-      int filled = sscanf("%d, %lf, %lf, %d, %lf, %lf, %d, %[^,]", new_street->start_id,lat1,lon1,new_street->end_id,lat2,lon2,new_street->street_name);
+      int filled = sscanf("%d, %lf, %lf, %d, %lf, %lf, %d, %[^,]", &new_street->start_id, &lat1,lon1,new_street->end_id, &lat2, &lon2, new_street->street_name);
       if (filled==8){
-        if (new_street->start_id>max_id){
-            max_id=new_street->start_id;
+        int highest_id_line;
+        if (new_street->start_id>=new_street->end_id){
+            highest_id_line= new_street->start_id;
+        } else{
+            highest_id_line =new_street->end_id;
         }
-        if (new_street->end_id>max_id){
-            max_id=new_street->end_id;
+        if (highest_id_line>current_capacity){
+            current_capacity= highest_id_line*1000; //buffer space
+            nodes = realloc(nodes,current_capacity*sizeof(Node));
         }
         nodes[new_street->start_id].lat=lat1;
         nodes[new_street->start_id].lon=lon1;
@@ -175,8 +178,9 @@ void load_streets(const char* f){
         nodes[new_street->end_id].lon=lon2;
         new_street->next= head;
         head = new_street;
+      } else {
+        free(new_street);
       }
     }
-    Node *intersections=malloc(sizeof(Node)*max_id);//dynamic array where each element is a node
-
+    fclose(file);
 }
