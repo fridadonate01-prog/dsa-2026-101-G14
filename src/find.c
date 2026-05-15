@@ -145,7 +145,7 @@ void find_place(Place* head) {
     }
 }
 
-void load_streets(const char* f){
+void load_streets(const char* f, Street** street_head, Node** nodes_head){
     FILE* file= fopen(f, "r");
     if (file==NULL){
         return;
@@ -160,7 +160,7 @@ void load_streets(const char* f){
     while (fgets(line, sizeof(line),file)){
       Street* new_street= malloc(sizeof(Street));
       if (new_street==NULL) break;
-      int filled = sscanf("%d, %lf, %lf, %d, %lf, %lf, %d, %[^,]", &new_street->start_id, &lat1,lon1,new_street->end_id, &lat2, &lon2, new_street->street_name);
+      int filled = sscanf(line, "%d, %lf, %lf, %d, %lf, %lf, %d, %[^,]", &new_street->start_id, &lat1,&lon1,&new_street->end_id, &lat2, &lon2,&new_street->length, new_street->street_name);
       if (filled==8){
         int highest_id_line;
         if (new_street->start_id>=new_street->end_id){
@@ -168,11 +168,16 @@ void load_streets(const char* f){
         } else{
             highest_id_line =new_street->end_id;
         }
-        if (highest_id_line>current_capacity){
-            current_capacity= highest_id_line*1000; //buffer space
-            nodes = realloc(nodes,current_capacity*sizeof(Node));
-        }
-        nodes[new_street->start_id].lat=lat1;
+        if (highest_id_line>=current_capacity){
+            current_capacity= highest_id_line+500; //buffer space
+            Node* temp = realloc(nodes,current_capacity*sizeof(Node));//reallocate space so it fits into a new list in case it returns NULL
+            if (temp==NULL){
+                free(new_street);
+                break;
+            }
+            nodes=temp;
+            }
+        nodes[new_street->start_id].lat=lat1;//storing the two nodes of line into the list of nodes
         nodes[new_street->start_id].lon=lon1;
         nodes[new_street->end_id].lat=lat2;
         nodes[new_street->end_id].lon=lon2;
@@ -182,5 +187,8 @@ void load_streets(const char* f){
         free(new_street);
       }
     }
+    *street_head= head;//saving the addresses in global pointer so they are not lost when function ends.
+    *nodes_head= nodes;// we use * to dereference the double pointers of the main
+
     fclose(file);
 }
