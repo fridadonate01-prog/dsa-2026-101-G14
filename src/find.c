@@ -192,3 +192,52 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head){
 
     fclose(file);
 }
+
+//Linear search through all the streets list to find connected streets --> share nodes
+char** connected_streets(Street* head, const char* target_name){
+    //find all streets connected to target
+    Street* target_street=NULL;
+    Street* current= head;
+    int connections=0;
+    int current_size=100;
+    char** connected_to=malloc(current_size*sizeof(char*));
+    if (connected_to==NULL){
+        return NULL;
+    }
+
+    while (current!=NULL){// loop to find the street strc of the targeted street
+        if (strcasecmp(target_name,current->street_name)==0){
+            target_street=current;
+            break;//we already found it
+        }
+        current=current->next;//keep iterating
+    }
+
+    if (target_street==NULL){
+            return NULL;//handle if it doesn't find it
+        }
+    
+    current= head;
+    int node1=target_street->start_id;
+    int node2=target_street->end_id;
+    while (current!=NULL){ //loop to find connections
+        if((current->start_id==node1||current->start_id==node2 || current->end_id==node1 || current->end_id==node2) && current!=target_street){
+           if (connections>=current_size){  
+            current_size*=2;
+            char* temp=realloc(connected_to,current_size*sizeof(char*));
+            if(temp!=NULL){
+                connected_to=temp;
+            }
+           } 
+            connected_to[connections]=current->street_name;
+            connections++;
+        }
+        current=current->next;
+    }
+
+    if (connections<current_size){
+        connected_to[connections]=NULL; //to indicate the caller where the array of pointers ends
+    }
+
+    return connected_to; //returns a list of the names of all streets connected to the target street
+}
