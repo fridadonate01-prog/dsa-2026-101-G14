@@ -153,6 +153,7 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head){
     char line[256];
     Street *head= NULL;
     double lat1, lon1, lat2, lon2;
+    int id1, id2;
 
     int current_capacity= 1000;
     Node* nodes=malloc(current_capacity*sizeof(Node));
@@ -160,13 +161,13 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head){
     while (fgets(line, sizeof(line),file)){
       Street* new_street= malloc(sizeof(Street));
       if (new_street==NULL) break;
-      int filled = sscanf(line, "%d, %lf, %lf, %d, %lf, %lf, %d, %[^,]", &new_street->start_id, &lat1,&lon1,&new_street->end_id, &lat2, &lon2,&new_street->length, new_street->street_name);
+      int filled = sscanf(line, "%d, %lf, %lf, %d, %lf, %lf, %d, %[^\n]", &id1, &lat1,&lon1,&id2, &lat2, &lon2,&new_street->length, new_street->street_name);
       if (filled==8){
         int highest_id_line;
-        if (new_street->start_id>=new_street->end_id){
-            highest_id_line= new_street->start_id;
+        if (id1>=id2){
+            highest_id_line= id1;
         } else{
-            highest_id_line =new_street->end_id;
+            highest_id_line =id2;
         }
         if (highest_id_line>=current_capacity){
             current_capacity= highest_id_line+500; //buffer space
@@ -177,10 +178,15 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head){
             }
             nodes=temp;
             }
-        nodes[new_street->start_id].lat=lat1;//storing the two nodes of line into the list of nodes
-        nodes[new_street->start_id].lon=lon1;
-        nodes[new_street->end_id].lat=lat2;
-        nodes[new_street->end_id].lon=lon2;
+        
+        nodes[id1].lat=lat1;//storing the two nodes of line into the list of nodes
+        nodes[id1].lon=lon1;
+        nodes[id1].id=id1;
+
+        nodes[id2].lat=lat2;
+        nodes[id2].lon=lon2;
+        nodes[id2].id=id2;
+
         new_street->next= head;
         head = new_street;
       } else {
@@ -218,10 +224,10 @@ char** connected_streets(Street* head, const char* target_name){
         }
     
     current= head;
-    int node1=target_street->start_id;
-    int node2=target_street->end_id;
+    int node1=target_street->start.id;
+    int node2=target_street->end.id;
     while (current!=NULL){ //loop to find connections
-        if((current->start_id==node1||current->start_id==node2 || current->end_id==node1 || current->end_id==node2) && current!=target_street){
+        if((current->start.id==node1||current->start.id==node2 || current->end.id==node1 || current->end.id==node2) && current!=target_street){
            if (connections>=current_size){  
             current_size*=2;
             char* temp=realloc(connected_to,current_size*sizeof(char*));
@@ -241,3 +247,12 @@ char** connected_streets(Street* head, const char* target_name){
 
     return connected_to; //returns a list of the names of all streets connected to the target street
 }
+
+//CODE FOR THE NEW AND MORE EFFICIENT WAY TO FIND CLOSEST STREET
+// CODE FOR SPATIAL HASHING:
+void get_grid_index (double coord_x, double coord_y, int* grid_x, int* grid_y){
+    *grid_x= coord_x/0.01;
+    *grid_y= coord_y/0.01;
+} //Function that transforms normal coordinates to grid coordinates
+
+//Function that takes a street and allocates it into its respective GridBox

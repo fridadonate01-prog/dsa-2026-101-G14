@@ -20,17 +20,32 @@ typedef struct Place{
 } Place;
 
 typedef struct {
+    int id;
     double lat;
     double lon;
 } Node;
 
 typedef struct Street{
-    int start_id;
-    int end_id;
+    Node start;
+    Node end;
     int length;
     char street_name[100];
     struct Street *next;
 } Street;
+
+typedef struct StreetNode{
+    Street* street;
+    struct StreetNode* next;
+} StreetNode; //for the linked list of streets inside a GridBox
+
+typedef struct GridBox{
+    StreetNode* streets; //"head" of the linked list of streets inside this GridBox
+    struct GridBox* next;
+} GridBox;
+
+typedef struct Grid{
+    GridBox* grid;//"head" to all the grid boxes
+} Grid;
 
 //DECLARATIONS:
 House* load_houses(const char* f);
