@@ -32,4 +32,5 @@ double toRadians(double degree);
 void latlon_to_xy(double lat_ref, double lon_ref, double lat, double lon, double *x, double *y);
 int get_turn_direction(Street* s1, Street* s2);
 
+void print_route_directions(PathNode* route);
 #endif

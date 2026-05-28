@@ -266,3 +266,35 @@ int get_turn_direction(Street* s1, Street* s2) {
         return 0;   // Straight
     }
 }
+
+void print_route_directions(PathNode* route) {
+    if (route == NULL) {
+        printf("\nSorry, no route could be found between these locations.\n");
+        return;
+    }
+    printf("\n--- ROUTE ---\n");
+    PathNode* curr = route;
+    int step = 1;
+
+    // Print the strating street
+    printf("%d. Start at %s\n", step++, curr->street->street_name);
+
+    while (curr != NULL && curr->next != NULL) {
+        Street* current_street = curr->street;
+        Street* next_street = curr->next->street;
+
+        // Use the cross-product function to look ahead at the intersection
+        int turn = get_turn_direction(current_street, next_street);
+
+        if (turn == 1) {
+            printf("%d. Turn left to %s\n", step++, next_street->street_name);
+        } else if (turn == -1) {
+            printf("%d. Turn right to %s\n", step++, next_street->street_name);
+        } else {
+            printf("%d. Continue straight to %s\n", step++, next_street->street_name);
+        }
+
+        curr = curr->next;  // Advance to the next street segment
+    }
+    printf("--- You have arrived to you destination ---\n");
+}
