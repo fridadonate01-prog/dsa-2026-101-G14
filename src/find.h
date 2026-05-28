@@ -39,13 +39,12 @@ typedef struct StreetNode{
 } StreetNode; //for the linked list of streets inside a GridBox
 
 typedef struct GridBox{
+    int row, col;
     StreetNode* streets; //"head" of the linked list of streets inside this GridBox
     struct GridBox* next;
 } GridBox;
 
-typedef struct Grid{
-    GridBox* grid;//"head" to all the grid boxes
-} Grid;
+;
 
 //DECLARATIONS:
 House* load_houses(const char* f);

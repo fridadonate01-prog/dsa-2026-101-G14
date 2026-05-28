@@ -145,7 +145,28 @@ void find_place(Place* head) {
     }
 }
 
-void load_streets(const char* f, Street** street_head, Node** nodes_head){
+// Quick helper to check if a number is prime
+int is_prime(int n) {
+    if (n <= 1) return 0;
+    if (n <= 3) return 1;
+    if (n % 2 == 0 || n % 3 == 0) return 0;
+    for (int i = 5; i * i <= n; i += 6) {
+        if (n % i == 0 || n % (i + 2) == 0) return 0;
+    }
+    return 1;
+}
+
+// Finds the next prime number larger than your estimate
+int get_next_prime(int n) {
+    if (n <= 1) return 2;
+    int prime = n;
+    while (!is_prime(prime)) {
+        prime++;
+    }
+    return prime;
+}
+
+void load_streets(const char* f, Street** street_head, Node** nodes_head, int* GridSize){
     FILE* file= fopen(f, "r");
     if (file==NULL){
         return;
@@ -153,7 +174,11 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head){
     char line[256];
     Street *head= NULL;
     double lat1, lon1, lat2, lon2;
-    int id1, id2;
+    int id1, id2; 
+    int max_lat=-90.0; 
+    int min_lat=90.0;
+    int max_lon=-180.0; 
+    int min_lon=180.0;
 
     int current_capacity= 1000;
     Node* nodes=malloc(current_capacity*sizeof(Node));
@@ -163,7 +188,7 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head){
       if (new_street==NULL) break;
       int filled = sscanf(line, "%d, %lf, %lf, %d, %lf, %lf, %d, %[^\n]", &id1, &lat1,&lon1,&id2, &lat2, &lon2,&new_street->length, new_street->street_name);
       if (filled==8){
-        int highest_id_line;
+        int highest_id_line; //useful for allocating memory
         if (id1>=id2){
             highest_id_line= id1;
         } else{
@@ -178,8 +203,21 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head){
             }
             nodes=temp;
             }
-        
-        nodes[id1].lat=lat1;//storing the two nodes of line into the list of nodes
+        //getting max and min lat and lon. useful for defining grid size for spatial hashing
+        if (max_lat<lat1) max_lat=lat1;
+        if (min_lat>lat1) min_lat=lat1;
+
+        if (max_lon<lon1) max_lon=lon1;
+        if (min_lon>lon1) min_lon=lon1;
+
+        if (max_lat<lat2) max_lat=lat2;
+        if (min_lat>lat2) min_lat=lat2;
+
+        if (max_lon<lon2) max_lon=lon2;
+        if (min_lon>lon2) min_lon=lon2;
+
+        //storing the two nodes of line into the list of nodes
+        nodes[id1].lat=lat1;
         nodes[id1].lon=lon1;
         nodes[id1].id=id1;
 
@@ -195,6 +233,17 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head){
     }
     *street_head= head;//saving the addresses in global pointer so they are not lost when function ends.
     *nodes_head= nodes;// we use * to dereference the double pointers of the main
+
+    //to get grid size (row and cols)
+    int rows= (max_lat-min_lat)/0.01;
+    int cols= (max_lon-min_lon)/0.01;
+    int estimated_boxes = rows*cols;
+
+    if (is_prime(estimated_boxes)==1){
+        GridSize= estimated_boxes;
+    }else{
+        GridSize=get_next_prime(estimated_boxes);
+    }
 
     fclose(file);
 }
@@ -255,4 +304,57 @@ void get_grid_index (double coord_x, double coord_y, int* grid_x, int* grid_y){
     *grid_y= coord_y/0.01;
 } //Function that transforms normal coordinates to grid coordinates
 
+int hash_function(int row, int col, int grid_size) { //grid size will be given by load_streets
+    unsigned int hash = (row * 73856093) ^ (col * 19349663);
+    return hash % grid_size;
+} //to get the index of the 1D array of GridBoxes
+
 //Function that takes a street and allocates it into its respective GridBox
+void street_to_box (Street* street,GridBox** GridBoxes, int grid_size){ //receives the head pointer of all grid boxes (the main grid)
+
+    int grid_x1, grid_y1; //CHANGE! do for midpoint instead
+    get_grid_index(street->start.lon,street->start.lat,&grid_x1,&grid_y1);
+
+    int grid_x2, grid_y2;
+    get_grid_index(street->end.lon,street->end.lat,&grid_x2,&grid_y2);
+
+    int index1=hash_function(grid_x1,grid_y1,grid_size);
+    int index2=hash_function(grid_x2,grid_y2,grid_size);
+
+    GridBox* current_box = GridBoxes[index1];
+    GridBox* target_box = NULL;
+
+    while (current_box != NULL) {//find target box
+        if (current_box->col == grid_x1 && current_box->row == grid_y1) {
+            target_box = current_box;
+            break;
+        }
+        current_box = current_box->next;
+    }
+
+    //if gridBox with that row and col doesn't exist, create it.
+    if (target_box == NULL) {
+        target_box = malloc(sizeof(GridBox));
+        if (target_box == NULL) return; //malloc check
+
+        target_box->col = grid_x1;
+        target_box->row = grid_y1;
+        target_box->streets = NULL; 
+        
+        // Insert at the head of the hash array linked list
+        target_box->next = GridBoxes[index1];
+        GridBoxes[index1] = target_box;
+    }
+
+    // insert the street into the target box street list
+    StreetNode* new_StreetNode = malloc(sizeof(StreetNode));
+    if (new_StreetNode != NULL) {
+        new_StreetNode->street = street;
+        
+        //push to the head of the streets linked list for this box
+        new_StreetNode->next = target_box->streets;
+        target_box->streets = new_StreetNode;
+    }
+
+    
+}
