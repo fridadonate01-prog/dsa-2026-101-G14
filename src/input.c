@@ -40,3 +40,24 @@ int choose_input(){
     }
   }
 }
+
+int choose_destination() {
+  printf("\n--- DESTINATION ---\n");
+  int chosen_input;
+  char buffer[50];
+  while(1) {
+    printf("Where do you want to go? Address (1), Place (2) or Coordinate (3)? \n");
+    fgets(buffer, sizeof(buffer), stdin);
+    if(sscanf(buffer, "%d", &chosen_input) == 1){
+      if (1 <= chosen_input && chosen_input <= 3){
+        return chosen_input;
+      }
+      else {
+        printf("the number provided (%d) was not between 1 and 3. \n", chosen_input);
+      }
+    }
+    else {
+      printf("Your input has no number. Try again!\n");
+    }
+  }
+}

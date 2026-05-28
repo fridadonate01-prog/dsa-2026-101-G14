@@ -56,7 +56,7 @@ int main() {
 
     // TEST 4: CROSS PRODUCT GEOMETRIC TURN EVALUATION
     // Moving from sA (n1->n2) to sB (n2->n3) is a heading change to the North (Left)
-    int turn = get_turn_directional(&sA, &sB);
+    int turn = get_turn_direction(&sA, &sB);
     int t4_ok = (turn == 1); // 1 represents a verified Left Turn
     print_test_result("Test 4: Geometric Turn Direction Cross Product evaluation (Left Turn)", t4_ok);
 
