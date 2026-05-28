@@ -52,5 +52,22 @@ int main() {
     printf("Not implemented yet. \n");
   }
 
+  int chosen_dest = choosen_destination();
+
+  if (chosen_dest == 1) { // the user chose address
+    sprintf(file_path, "maps/%s/houses.txt", all_maps[chosen_map]);
+    House* dest_houses = load_houses(file_path);
+    find_address(dest_houses);
+    free_houses(dest_houses);
+  }
+  else if (chosen_dest == 2) {  // the user chose place
+    sprintf(file_path, "maps/%s/places.txt", all_maps[chosen_map]);
+    Place* dest_places = load_places(file_path);
+    find_place(dest_places);
+    free_place(dest_places);
+  }
+  else {
+    printf("Not implemented yet. \n");
+  }
     return 0;
 }
