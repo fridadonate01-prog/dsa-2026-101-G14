@@ -117,6 +117,13 @@ PathNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets) 
         return NULL;
     }
 
+    // *Optimization BFS: Reset all street visited flags to 0 (we eliminate the linked list, visited)
+    Street* reset_curr = all_streets;
+    while (reset_curr != NULL) {
+        reset_curr->visited = 0;
+        reset_curr = reset_curr->next;
+    }
+
     // Create an empty queue of street lists, Q
     Queue Q;
     init_queue(&Q);
@@ -127,9 +134,6 @@ PathNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets) 
 
     // Enqueue initial_path intp Q
     enqueue(&Q, initial_path);
-
-    // Create a street list [], visited
-    PathNode* visited = NULL;
 
     PathNode* final_route = NULL;   // To track if we successfully find the path
 
@@ -150,20 +154,9 @@ PathNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets) 
             break;
         }
 
-        // If current_street not in visited: add current_street to visited
-        int current_in_visited = 0;
-        PathNode* v_curr = visited;
-        while (v_curr != NULL) {
-            if (v_curr->street == current_street) {
-                current_in_visited = 1;
-                break;
-            }
-            v_curr = v_curr->next;
-        }
-
-        if (!current_in_visited) {
-            // Add current_street to visited
-            append_street(&visited, current_street);
+        // *Optimization BFS: O(1) check instead of looping through a visited list
+        if (!current_street->visited) {
+            current_street->visited = 1;    // Marked as visited instantly
 
             // For connected_street in intersections_graph[current_street.to_intersection_id]:
             // We scan the map database to find any street connected to current_Street
@@ -173,37 +166,24 @@ PathNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets) 
                 //Connection rule: they share a starting or ending intersection ID
                 int is_connected = (connected_street != current_street) && (connected_street->start.id == current_street->start.id || connected_street->start.id == current_street->end.id || connected_street->end.id == current_street->start.id || connected_street->end.id == current_street->end.id);
 
-                // If connected_street not in visited: new_path = path + [connected_street] and enqueue new_path into Q
+                // *Optimization BFS: O(1) check for neighbor
                 if (is_connected) {
-                    int connected_in_visited = 0;
-                    PathNode* v_check = visited;
-                    while (v_check != NULL) {
-                        if (v_check->street == connected_street) {
-                            connected_in_visited = 1;
-                            break;
-                        }
-                        v_check = v_check->next;
-                    }
-
-                    if (!connected_in_visited) {
+                    if (!connected_street->visited) {
                         PathNode* new_path = clone_path(path);
                         append_street(&new_path, connected_street);
-                        
                         enqueue(&Q, new_path);
                     }
                 }
                 connected_street = connected_street->next;  // To keep scanning map
             }
         }
+
         // If this wasn't our target path, free its temporary list copy to avoid memory leaks
         if (final_route != path) {
             free_path(path);
         }
     }
-
-    // Free our temporary 'visited' tracking list
-    free_path(visited);
-
+    
     // If we exited early but things are still left in the queue, we clean them out
     while (!is_queue_empty(&Q)) {
         PathNode* leftover = dequeue(&Q);
