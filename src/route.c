@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "route.h"
 
+// QUEUE OF STREET LISTS' FUNCTIONS
 void init_queue(Queue* q) {
     q->front = NULL;
     q->rear = NULL;
@@ -77,4 +78,137 @@ PathNode* dequeue(Queue* q) {
 
     free(temp);
     return path;
+}
+
+
+// BFS ALGORITHM THE GRAPH FUNCTIONS
+// Helper: Append a street to the end of a street list (PathNode chain)
+void append_street(PathNode** head, Street* street) {
+    PathNode* new_node = (PathNode*)malloc(sizeof(PathNode));
+    if (!new_node) return;
+    new_node->street = street;
+    new_node->next = NULL;
+
+    if (*head == NULL) {
+        *head = new_node;
+        return;
+    }
+
+    PathNode* curr = *head;
+    while(curr->next != NULL) {
+        curr = curr->next;
+    }
+    curr->next = new_node;
+}
+
+// Helper: Free an allocated street list path
+void free_path(PathNode* head) {
+    while (head != NULL) {
+        PathNode* temp = head;
+        head = head->next;
+        free(temp);
+    }
+}
+
+// The Pathfinding Function
+PathNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets) {
+    // Edge case check
+    if (!fromStreet || !toStreet || !all_streets) {
+        return NULL;
+    }
+
+    // Create an empty queue of street lists, Q
+    Queue Q;
+    init_queue(&Q);
+
+    // Create a street list [fromStreet], initial_path
+    PathNode* initial_path = NULL;
+    append_street(&initial_path, fromStreet);
+
+    // Enqueue initial_path intp Q
+    enqueue(&Q, initial_path);
+
+    // Create a street list [], visited
+    PathNode* visited = NULL;
+
+    PathNode* final_route = NULL;   // To track if we successfully find the path
+
+    while (!is_queue_empty(&Q)) {
+        
+        PathNode* path = dequeue(&Q);
+
+        // current_street = path[-1] (Find the last element of the list)
+        PathNode* tracking = path;
+        while (tracking->next != NULL) {
+            tracking = tracking->next;
+        }
+        Street* current_street = tracking->street;
+
+        // If current_street == to Street: return path
+        if (current_street == toStreet) {
+            final_route = path;
+            break;
+        }
+
+        // If current_street not in visited: add current_street to visited
+        int current_in_visited = 0;
+        PathNode* v_curr = visited;
+        while (v_curr != NULL) {
+            if (v_curr->street == current_street) {
+                current_in_visited = 1;
+                break;
+            }
+            v_curr = v_curr->next;
+        }
+
+        if (!current_in_visited) {
+            // Add current_street to visited
+            append_street(&visited, current_street);
+
+            // For connected_street in intersections_graph[current_street.to_intersection_id]:
+            // We scan the map database to find any street connected to current_Street
+            Street* connected_street = all_streets;
+            while (connected_street != NULL) {
+
+                //Connection rule: they share a starting or ending intersection ID
+                int is_connected = (connected_street != current_street) && (connected_street->start.id == current_street->start.id || connected_street->start.id == current_street->end.id || connected_street->end.id == current_street->start.id || connected_street->end.id == current_street->end.id);
+
+                // If connected_street not in visited: new_path = path + [connected_street] and enqueue new_path into Q
+                if (is_connected) {
+                    int connected_in_visited = 0;
+                    PathNode* v_check = visited;
+                    while (v_check != NULL) {
+                        if (v_check->street == connected_street) {
+                            connected_in_visited = 1;
+                            break;
+                        }
+                        v_check = v_check->next;
+                    }
+
+                    if (!connected_in_visited) {
+                        PathNode* new_path = clone_path(path);
+                        append_street(&new_path, connected_street);
+                        
+                        enqueue(&Q, new_path);
+                    }
+                }
+                connected_street = connected_street->next;  // To keep scanning map
+            }
+        }
+        // If this wasn't our target path, free its temporary list copy to avoid memory leaks
+        if (final_route != path) {
+            free_path(path);
+        }
+    }
+
+    // Free our temporary 'visited' tracking list
+    free_path(visited);
+
+    // If we exited early but things are still left in the queue, we clean them out
+    while (!is_queue_empty(&Q)) {
+        PathNode* leftover = dequeue(&Q);
+        free_path(leftover);
+    }
+
+    return final_route;
 }
