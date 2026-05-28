@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include "find.h"
+#include "route.h"
 
 void free_houses(House* head) {
    House* temp;
@@ -29,8 +30,18 @@ int main() {
   
   // Call the function and store the result
   int chosen_map = choose_map(all_maps); 
-  int chosen_input = choose_input (); //input has the choice number
 
+  // We need to load the map's streets so the BFS algorithm can use them
+  char street_file_path[100];
+  sprintf(street_file_path, "maps/%s/streets.txt", all_maps[chosen_map]);
+  Street* all_streets = load_streets(street_file_path);
+
+  // Variables to hold the starting and ending streets
+  Street* origin_street = NULL;
+  Street* dest_street = NULL;
+
+  // ORIGIN SECTION
+  int chosen_input = choose_input (); //input has the choice number
   char file_path[100];
   if (chosen_input==1){//the user chose address
     // Construct path: assuming execution from 'src' folder
@@ -52,6 +63,7 @@ int main() {
     printf("Not implemented yet. \n");
   }
 
+  //DESTINATION SECTION
   int chosen_dest = choosen_destination();
 
   if (chosen_dest == 1) { // the user chose address
@@ -69,5 +81,18 @@ int main() {
   else {
     printf("Not implemented yet. \n");
   }
-    return 0;
+
+  // GENERATE AND PRINT THE ROUTE
+  // If both an origin and destination were succesfully found, run the BFS
+  if (origin_street != NULL && dest_street != NULL) {
+    PathNode* final_route = find_route(origin_street, dest_street, all_streets);
+
+    print_route_directions(final_route);
+
+    free_path(final_route);
+  }
+  
+  free_streets(all_streets);
+
+  return 0;
 }
