@@ -15,6 +15,3 @@ void normalizeStreetName(char* destination, const char* original) {
         strcpy(destination, original);
     }
 }
-
-
-// Avinguda (Av. o Av/), Passeig(Pass. o Pass/)

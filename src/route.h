@@ -24,4 +24,8 @@ void enqueue(Queue* q, PathNode* path);
 PathNode* dequeue(Queue* q);
 int is_queue_empty(Queue* q);
 
+void append_street(PathNode** head, Street* street);
+void free_path(PathNode* head);
+PathNode* find_route(Street* origin_street, Street* dest_street, Street* all_streets);
+
 #endif
