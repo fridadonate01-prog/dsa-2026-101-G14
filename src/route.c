@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "route.h"
+
+#define EARTH_RADIUS 6371.0
 
 // QUEUE OF STREET LISTS' FUNCTIONS
 void init_queue(Queue* q) {
@@ -183,7 +186,7 @@ PathNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets) 
             free_path(path);
         }
     }
-    
+
     // If we exited early but things are still left in the queue, we clean them out
     while (!is_queue_empty(&Q)) {
         PathNode* leftover = dequeue(&Q);
@@ -191,4 +194,75 @@ PathNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets) 
     }
 
     return final_route;
+}
+
+
+// USAGE OF THE CROSS -> TURN LEFT OR RIGHT
+// Helper: converts degrees to radians
+double toRadians(double degree) {
+    return degree * (M_PI / 180.0);
+}
+
+// Projection function
+void latlon_to_xy(double lat_ref, double lon_ref, double lat, double lon, double *x, double *y) {
+    double lat_ref_rad = toRadians(lat_ref);
+    double dlat = toRadians(lat - lat_ref);
+    double dlon = toRadians(lon - lon_ref);
+    *x = EARTH_RADIUS * dlon * cos(lat_ref_rad);
+    *y = EARTH_RADIUS * dlat;
+}
+
+// Function to determine turn direction
+int get_turn_direction(Street* s1, Street* s2) {
+    if (!s1 || !s2) {
+        return 0;
+    }
+    
+    Node A_node, B_node, C_node;
+    int found_intersection = 0;
+
+    // 1. Identify the shared intersection node 'B' and incoming node 'A' from s1
+    if (s1->end.id == s2->start.id || s1->end.id == s2->end.id) {
+        B_node = s1->end;   // Intersection is at the end of s1
+        A_node = s1->start; // We came from the start of s1
+        found_intersection = 1;
+    } 
+    else if (s1->start.id == s2->start.id || s1->start.id == s2->end.id) {
+        B_node = s1->start; // Intersection is at the start of s1
+        A_node = s1->end;   // We came from the end of s1
+        found_intersection = 1;
+    }
+    
+    if (!found_intersection) {  
+        return 0;   // If they don't touch, treat as straight
+    }
+
+    // 2. Identify the outgoing node 'C' on s2
+    if (s2->start.id == B_node.id) {
+        C_node = s2->end;
+    } else{
+        C_node = s2->start;
+    }
+
+    // 3. Convert all three spherical coordinates to flat X/Y coordinates.
+    // We use the intersection point 'B' as our local reference point (lat_ref, lon_ref)
+    double Ax, Ay, Bx, By, Cx, Cy;
+
+    latlon_to_xy(B_node.lat, B_node.lon, A_node.lat, A_node.lon, &Ax, &Ay);
+    latlon_to_xy(B_node.lat, B_node.lon, B_node.lat, B_node.lon, &Bx, &By); // Bx and By will naturally be 0.0
+    latlon_to_xy(B_node.lat, B_node.lon, C_node.lat, C_node.lon, &Cx, &Cy);
+
+    // 4. Calculate Cross Product
+    double cross_product = (Bx - Ax) * (Cy - By) - (By - Ay) * (Cx - Bx);
+
+    // We use an epsilon check to prevent floating-point inaccuracies from misidentifying straightroads
+    double epsilon = 1e-7;
+
+    if(cross_product > epsilon) {
+        return 1;   // Turn Left (> 0)
+    } else if (cross_product < -epsilon) {
+        return -1;  // Turn Right (< 0)
+    } else {
+        return 0;   // Straight
+    }
 }

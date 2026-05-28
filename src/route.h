@@ -28,4 +28,8 @@ void append_street(PathNode** head, Street* street);
 void free_path(PathNode* head);
 PathNode* find_route(Street* origin_street, Street* dest_street, Street* all_streets);
 
+double toRadians(double degree);
+void latlon_to_xy(double lat_ref, double lon_ref, double lat, double lon, double *x, double *y);
+int get_turn_direction(Street* s1, Street* s2);
+
 #endif
