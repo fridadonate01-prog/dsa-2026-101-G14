@@ -197,7 +197,7 @@ PathNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets) 
 }
 
 
-// USAGE OF THE CROSS -> TURN LEFT OR RIGHT
+// USAGE OF THE CROSS PRODUCT -> TURN LEFT OR RIGHT
 // Helper: converts degrees to radians
 double toRadians(double degree) {
     return degree * (M_PI / 180.0);
