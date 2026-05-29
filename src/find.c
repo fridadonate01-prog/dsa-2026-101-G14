@@ -279,7 +279,7 @@ char** connected_streets(Street* head, const char* target_name){
         if((current->start.id==node1||current->start.id==node2 || current->end.id==node1 || current->end.id==node2) && current!=target_street){
            if (connections>=current_size){  
             current_size*=2;
-            char* temp=realloc(connected_to,current_size*sizeof(char*));
+            char** temp=realloc(connected_to,current_size*sizeof(char*));
             if(temp!=NULL){
                 connected_to=temp;
             }
