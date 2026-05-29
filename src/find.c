@@ -240,9 +240,9 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head, int* G
     int estimated_boxes = rows*cols;
 
     if (is_prime(estimated_boxes)==1){
-        GridSize= estimated_boxes;
+        *GridSize= estimated_boxes;
     }else{
-        GridSize=get_next_prime(estimated_boxes);//we want a prime to get less collisions
+        *GridSize=get_next_prime(estimated_boxes);//we want a prime to get less collisions
     }
 
     fclose(file);
