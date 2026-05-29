@@ -85,7 +85,7 @@ int main() {
   // GENERATE AND PRINT THE ROUTE
   // If both an origin and destination were succesfully found, run the BFS
   if (origin_street != NULL && dest_street != NULL) {
-    PathNode* final_route = find_route(origin_street, dest_street, all_streets);
+    StreetNode* final_route = find_route(origin_street, dest_street, all_streets);
 
     print_route_directions(final_route);
 
