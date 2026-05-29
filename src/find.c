@@ -242,7 +242,7 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head, int* G
     if (is_prime(estimated_boxes)==1){
         GridSize= estimated_boxes;
     }else{
-        GridSize=get_next_prime(estimated_boxes);
+        GridSize=get_next_prime(estimated_boxes);//we want a prime to get less collisions
     }
 
     fclose(file);
@@ -355,6 +355,51 @@ void street_to_box (Street* street,GridBox** GridBoxes, int grid_size){ //receiv
         new_StreetNode->next = target_box->streets;
         target_box->streets = new_StreetNode;
     }
-
     
+}
+
+//CODE FOR INTERSECTION HASH MAPPING
+int intersection_hash(int intersection_id, int graph_size){
+    return intersection_id%graph_size; //by modulo to get index
+}
+
+void street_to_intersection (IntersectionBucket** graph, int graph_size, int target_id, Street* street){
+    //you have target id as a parameter bc each street has two nodes, so you have to indicate which one it is now
+    int index= intersection_hash(target_id, graph_size);//where it will be mapped to
+
+    IntersectionBucket* current= graph[index];
+    IntersectionBucket* targetBucket= NULL;
+
+    //get target bucket
+    //1. is it already in map?
+    while (current!=NULL){
+        if (current->intersection_id==target_id){
+            targetBucket=current;
+            break;
+        }
+        current=current->next;
+    }
+
+    if (targetBucket==NULL){//2. it isn't yet, so create it
+        //1) memory
+        targetBucket= malloc(sizeof(IntersectionBucket));
+        if (targetBucket==NULL) return;
+        //2) fill
+        targetBucket->intersection_id= target_id;
+        targetBucket->connected_streets= NULL;
+        //3) chain
+        targetBucket->next= graph[index];
+        graph[index]= targetBucket;
+    }
+    
+    // Create a new node for the street list inside this bucket
+    StreetNode* new_node = malloc(sizeof(StreetNode));
+    if (new_node != NULL) {
+        new_node->street = street;
+        
+    // Push to the head of the connected_streets linked list
+    new_node->next = targetBucket->connected_streets;
+    targetBucket->connected_streets = new_node;
+    }
+
 }

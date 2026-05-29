@@ -33,6 +33,8 @@ typedef struct Street{
     struct Street *next;
 } Street;
 
+//New structures for Spatial Hashing
+
 typedef struct StreetNode{
     Street* street;
     struct StreetNode* next;
@@ -44,7 +46,13 @@ typedef struct GridBox{
     struct GridBox* next;
 } GridBox;
 
-;
+//New structure for Intersection Hash Map
+typedef struct IntersectionBucket {
+    int intersection_id;
+    StreetNode* connected_streets;//all streets connected to this intersection
+    struct IntersectionBucket* next;//for chainning (collisions)
+} IntersectionBucket;
+
 
 //DECLARATIONS:
 House* load_houses(const char* f);
