@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "route.h"
+#include "find.h"
 
 #define EARTH_RADIUS 6371.0
 
@@ -16,20 +17,20 @@ int is_queue_empty(Queue* q) {
 }
 
 // Helper function that makes an exact copy of a street list so that branching paths don't tamgle up their histories.
-PathNode* clone_path(PathNode* head) {
+StreetNode* clone_path(StreetNode* head) {
     if (head == NULL) return NULL;
 
     // Allocate memory for the first node of the cloned path
-    PathNode* new_head = (PathNode*)malloc(sizeof(PathNode));
+    StreetNode* new_head = (StreetNode*)malloc(sizeof(StreetNode));
     new_head->street = head->street;
     new_head->next = NULL;
 
-    PathNode* current = head->next; //Pointer that walks through the old list to see what streets we need to copy next.
-    PathNode* tail = new_head;      // Keeps track of the very end of the new cloned list
+    StreetNode* current = head->next; //Pointer that walks through the old list to see what streets we need to copy next.
+    StreetNode* tail = new_head;      // Keeps track of the very end of the new cloned list
 
     // Loop through the rest of the original street list and copy each element
     while (current != NULL) {
-        PathNode* new_node = (PathNode*)malloc(sizeof(PathNode));
+        StreetNode* new_node = (StreetNode*)malloc(sizeof(StreetNode));
         new_node->street = current->street;
         new_node->next = NULL;
 
@@ -43,7 +44,7 @@ PathNode* clone_path(PathNode* head) {
 }
 
 // Add a complete journey (street list) to the back of the queue
-void enqueue(Queue* q, PathNode* path) {
+void enqueue(Queue* q, StreetNode* path) {
     QueueNode* new_queue_node = (QueueNode*)malloc(sizeof(QueueNode));
     if (new_queue_node == NULL) {
         printf("Error: Out of memory inside enqueue!\n");
@@ -64,13 +65,13 @@ void enqueue(Queue* q, PathNode* path) {
 }
 
 // Take a journey (street list) out from the FRONT of the queue
-PathNode* dequeue(Queue* q) {
+StreetNode* dequeue(Queue* q) {
     if (is_queue_empty(q)) {
         return NULL;
     }
 
     QueueNode* temp = q->front;
-    PathNode* path = temp->path;    // Grab the street list pointer
+    StreetNode* path = temp->path;    // Grab the street list pointer
 
     q->front = q->front->next;
 
@@ -85,9 +86,9 @@ PathNode* dequeue(Queue* q) {
 
 
 // BFS ALGORITHM THE GRAPH FUNCTIONS
-// Helper: Append a street to the end of a street list (PathNode chain)
-void append_street(PathNode** head, Street* street) {
-    PathNode* new_node = (PathNode*)malloc(sizeof(PathNode));
+// Helper: Append a street to the end of a street list (StreetNode chain)
+void append_street(StreetNode** head, Street* street) {
+    StreetNode* new_node = (StreetNode*)malloc(sizeof(StreetNode));
     if (!new_node) return;
     new_node->street = street;
     new_node->next = NULL;
@@ -97,7 +98,7 @@ void append_street(PathNode** head, Street* street) {
         return;
     }
 
-    PathNode* curr = *head;
+    StreetNode* curr = *head;
     while(curr->next != NULL) {
         curr = curr->next;
     }
@@ -105,16 +106,16 @@ void append_street(PathNode** head, Street* street) {
 }
 
 // Helper: Free an allocated street list path
-void free_path(PathNode* head) {
+void free_path(StreetNode* head) {
     while (head != NULL) {
-        PathNode* temp = head;
+        StreetNode* temp = head;
         head = head->next;
         free(temp);
     }
 }
 
 // The Pathfinding Function
-PathNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets) {
+StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets) {
     // Edge case check
     if (!fromStreet || !toStreet || !all_streets) {
         return NULL;
@@ -132,20 +133,20 @@ PathNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets) 
     init_queue(&Q);
 
     // Create a street list [fromStreet], initial_path
-    PathNode* initial_path = NULL;
+    StreetNode* initial_path = NULL;
     append_street(&initial_path, fromStreet);
 
     // Enqueue initial_path intp Q
     enqueue(&Q, initial_path);
 
-    PathNode* final_route = NULL;   // To track if we successfully find the path
+    StreetNode* final_route = NULL;   // To track if we successfully find the path
 
     while (!is_queue_empty(&Q)) {
         
-        PathNode* path = dequeue(&Q);
+        StreetNode* path = dequeue(&Q);
 
         // current_street = path[-1] (Find the last element of the list)
-        PathNode* tracking = path;
+        StreetNode* tracking = path;
         while (tracking->next != NULL) {
             tracking = tracking->next;
         }
@@ -172,7 +173,7 @@ PathNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets) 
                 // *Optimization BFS: O(1) check for neighbor
                 if (is_connected) {
                     if (!connected_street->visited) {
-                        PathNode* new_path = clone_path(path);
+                        StreetNode* new_path = clone_path(path);
                         append_street(&new_path, connected_street);
                         enqueue(&Q, new_path);
                     }
@@ -189,7 +190,7 @@ PathNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets) 
 
     // If we exited early but things are still left in the queue, we clean them out
     while (!is_queue_empty(&Q)) {
-        PathNode* leftover = dequeue(&Q);
+        StreetNode* leftover = dequeue(&Q);
         free_path(leftover);
     }
 
@@ -267,13 +268,13 @@ int get_turn_direction(Street* s1, Street* s2) {
     }
 }
 
-void print_route_directions(PathNode* route) {
+void print_route_directions(StreetNode* route) {
     if (route == NULL) {
         printf("\nSorry, no route could be found between these locations.\n");
         return;
     }
     printf("\n--- ROUTE ---\n");
-    PathNode* curr = route;
+    StreetNode* curr = route;
     int step = 1;
 
     // Print the strating street
