@@ -30,6 +30,7 @@ typedef struct Street{
     Node end;
     int length;
     char street_name[100];
+    int visited;
     struct Street *next;
 } Street;
 

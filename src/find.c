@@ -25,7 +25,7 @@ House* load_houses(const char* f){
 
     int filled= sscanf(line, "%[^,],%d,%lf,%lf", newHouse->street_name, &newHouse->house_number, &newHouse->lat, &newHouse->lon);
     
-    if (filled==4){//it was access and stored
+    if (filled==4){//it was accessed and stored
         newHouse->next = head;//we link it to the list
         head = newHouse;
     } else {
