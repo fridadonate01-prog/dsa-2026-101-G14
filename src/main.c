@@ -68,7 +68,19 @@ int main() {
   // GENERATE AND PRINT THE ROUTE
   // If both an origin and destination were succesfully found, run the BFS
   if (origin_street != NULL && dest_street != NULL) {
+    
+    // Start Timer
+    clock_t start = clocl();
+
     StreetNode* final_route = find_route(origin_street, dest_street, all_streets);
+
+    // Stop Timer
+    clock_t end = clock();
+
+    // Calculate latency in miliseconds
+    double time_spent = (double)(end - start) / CLOCKS_PER_SEC * 1000.0;
+    printf("\nLatency Results for map '%s' :\n", all_maps[chosen_map]);
+    printf("Time taken: %f ms\n", time_spent);
 
     print_route_directions(final_route);
 
