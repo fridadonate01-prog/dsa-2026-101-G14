@@ -195,15 +195,8 @@ StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets
         if (final_route != path) {
             free_path(path);
         }
-        
-        if (total_pasos % 10000 == 0) {
-            printf("[TEST] %d calles analizadas. El BFS sigue buscando...\n", total_pasos);
-        }
-    }
 
-    printf("\n[TEST RESULTADO] Busqueda terminada.\n");
-    printf("- Pasos totales (Calles extraidas de la cola): %d\n", total_pasos);
-    printf("- Total de calles unicas exploradas en la ciudad: %d\n", calles_descubiertas);
+    }
 
     while (!is_queue_empty(&Q)) {
         StreetNode* leftover = dequeue(&Q);
@@ -293,43 +286,36 @@ void print_route_directions(StreetNode* route) {
     StreetNode* curr = route;
     int step = 1;
 
-    // 1. Arrancamos con la primera calle
     char* current_name = curr->street->street_name;
     double accumulated_length = curr->street->length;
     Street* last_segment_of_current_street = curr->street;
 
     curr = curr->next;
 
-    // Acumulamos todos los tramos que sigan siendo de la primera calle
     while (curr != NULL && strcmp(curr->street->street_name, current_name) == 0) {
         accumulated_length += curr->street->length;
         last_segment_of_current_street = curr->street;
         curr = curr->next;
     }
 
-    // Imprimimos el paso inicial ya con todos sus metros sumados
     printf("%d. Start at %s and continue for %.2fm\n", step++, current_name, accumulated_length);
 
-    // 2. Procesamos el resto de las calles
     while (curr != NULL) {
         Street* first_segment_of_new_street = curr->street;
         char* new_name = first_segment_of_new_street->street_name;
         double new_accumulated_length = first_segment_of_new_street->length;
 
-        // Calculamos el giro usando el cambio de calle exacto
         int turn = get_turn_direction(last_segment_of_current_street, first_segment_of_new_street);
 
-        // Avanzamos y acumulamos los metros de esta nueva calle
         Street* current_segment = first_segment_of_new_street;
         curr = curr->next;
         
         while (curr != NULL && strcmp(curr->street->street_name, new_name) == 0) {
             new_accumulated_length += curr->street->length;
-            current_segment = curr->street; // Guardamos este tramo por si es el último
+            current_segment = curr->street; 
             curr = curr->next;
         }
 
-        // Imprimimos la instrucción ya agrupada
         if (turn == 1) {
             printf("%d. Turn left to %s and continue for %.2fm\n", step++, new_name, new_accumulated_length);
         } else if (turn == -1) {
@@ -338,7 +324,6 @@ void print_route_directions(StreetNode* route) {
             printf("%d. Continue straight to %s and continue for %.2fm\n", step++, new_name, new_accumulated_length);
         }
 
-        // Actualizamos las variables para el siguiente cambio de calle
         last_segment_of_current_street = current_segment;
         current_name = new_name;
     }
