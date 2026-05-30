@@ -151,27 +151,37 @@ Street* find_address(House* head, Street* all_streets) {
 }
 
 //Prints the coordinates based on place
-void find_place(Place* head) {
+#include <string.h>
+
+Street* find_place(Place* head, Street* all_streets) {
     char search_place[256];
 
     printf("Enter place name (e.g. Universitat Pompeu Fabra-Campus del Poblenou or L'Illa Diagonal): ");
     fgets(search_place, sizeof(search_place), stdin);
-        // Remove the newline character from the string
-        search_place[strcspn(search_place, "\n")] = 0;
+    // Remove the newline character from the string
+    search_place[strcspn(search_place, "\n")] = 0;
     
     while (1) {
-        //Sequential search
-        Place *current= head;
-        while(current!=NULL){
-            if (strcasecmp(search_place,current->name)==0){
+        // Sequential search
+        Place *current = head;
+        while(current != NULL) {
+            if (strcasecmp(search_place, current->name) == 0){
                 printf("Found at (%f, %f)\n", current->latitude, current->longitude);
-                return;
+                
+              
+                Street* closest_street = get_closest_street(current->latitude, current->longitude, all_streets);
+                
+                return closest_street;
             }
-            current= current->next;
+            current = current->next;
         }
         
-        //finished all places and didn't find it:
+        // finished all places and didn't find it:
         strcpy(search_place, similar_places(search_place, head));
+        
+        if (strlen(search_place) == 0 || strcmp(search_place, "0") == 0) {
+            return NULL;
+        }
     }
 }
 
