@@ -151,27 +151,37 @@ Street* find_address(House* head, Street* all_streets) {
 }
 
 //Prints the coordinates based on place
-void find_place(Place* head) {
+#include <string.h>
+
+Street* find_place(Place* head, Street* all_streets) {
     char search_place[256];
 
     printf("Enter place name (e.g. Universitat Pompeu Fabra-Campus del Poblenou or L'Illa Diagonal): ");
     fgets(search_place, sizeof(search_place), stdin);
-        // Remove the newline character from the string
-        search_place[strcspn(search_place, "\n")] = 0;
+    // Remove the newline character from the string
+    search_place[strcspn(search_place, "\n")] = 0;
     
     while (1) {
-        //Sequential search
-        Place *current= head;
-        while(current!=NULL){
-            if (strcasecmp(search_place,current->name)==0){
+        // Sequential search
+        Place *current = head;
+        while(current != NULL) {
+            if (strcasecmp(search_place, current->name) == 0){
                 printf("Found at (%f, %f)\n", current->latitude, current->longitude);
-                return;
+                
+              
+                Street* closest_street = get_closest_street(current->latitude, current->longitude, all_streets);
+                
+                return closest_street;
             }
-            current= current->next;
+            current = current->next;
         }
         
-        //finished all places and didn't find it:
+        // finished all places and didn't find it:
         strcpy(search_place, similar_places(search_place, head));
+        
+        if (strlen(search_place) == 0 || strcmp(search_place, "0") == 0) {
+            return NULL;
+        }
     }
 }
 
@@ -206,7 +216,6 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head, int* G
     char line[256];
     Street *head = NULL;
     
-    // 1. Usamos long long para los IDs colosales de OpenStreetMap
     long long id1, id2; 
     double lat1, lon1, lat2, lon2;
     
@@ -221,12 +230,10 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head, int* G
         Street* new_street = malloc(sizeof(Street));
         if (new_street == NULL) break;
         
-        // 2. Ajustamos sscanf: %lld para long long, %lf para la longitud
         int filled = sscanf(line, "%lld, %lf, %lf, %lld, %lf, %lf, %lf, %[^\n]", 
                             &id1, &lat1, &lon1, &id2, &lat2, &lon2, &new_street->length, new_street->street_name);
         
         if (filled == 8) {
-            // Actualizamos los máximos y mínimos de la cuadrícula
             if (lat1 > max_lat) max_lat = lat1;
             if (lat1 < min_lat) min_lat = lat1;
             if (lon1 > max_lon) max_lon = lon1;
@@ -236,7 +243,6 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head, int* G
             if (lon2 > max_lon) max_lon = lon2;
             if (lon2 < min_lon) min_lon = lon2;
 
-            // 3. Guardamos los datos de los nodos DIRECTAMENTE en la calle
             new_street->start.id = id1;
             new_street->start.lat = lat1;
             new_street->start.lon = lon1;
@@ -248,11 +254,10 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head, int* G
             new_street->mid_lat = (lat1 + lat2) / 2.0;
             new_street->mid_lon = (lon1 + lon2) / 2.0;
             
-            // Enganchamos la calle a la lista
             new_street->next = head;
             head = new_street;
         } else {
-            free(new_street); // Si la línea está malformada, la descartamos
+            free(new_street);
         }
     }
     
@@ -441,7 +446,7 @@ double haversine(Position posA, Position posB) {
 Street* get_closest_street(double user_lat, double user_lon, Street* all_streets) {
     Street* current = all_streets;
     Street* closest_street = NULL;
-    double min_distance = DBL_MAX; // El número más grande posible para empezar
+    double min_distance = DBL_MAX;
 
     Position target_pos = {user_lat, user_lon};
 

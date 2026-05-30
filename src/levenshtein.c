@@ -106,7 +106,7 @@ char * similar_streets(char *inp_string, House *head){
         } else if (choice == 0) {
             printf("Enter the new street name: ");
             fgets(current_search, sizeof(current_search), stdin);
-            current_search[strcspn(current_search, "\n")] = 0; // Quitar el '\n' maldito
+            current_search[strcspn(current_search, "\n")] = 0; 
 
         } 
     }
@@ -119,11 +119,11 @@ int option_menu(int low_lim, int high_lim){
             printf("\nChoose an option (%d-%d): ",low_lim, high_lim);
             
             if (scanf("%d", &choice) != 1) {
-                while (getchar() != '\n'); // Limpiar buffer si mete letras
+                while (getchar() != '\n'); 
                 printf("Invalid input. Please enter a number.\n");
-                continue; // Reinicia el bucle (vuelve a calcular, pero no pasa nada)
+                continue; 
             }
-            while (getchar() != '\n'); // Limpiar el salto de línea del scanf
+            while (getchar() != '\n');
 
             if (choice >= low_lim && choice <= high_lim) {
             
