@@ -74,4 +74,6 @@ void street_to_intersection (IntersectionBucket** graph, int graph_size, int tar
 void find_address(House* head);
 void find_place(Place* head);
 int intersection_hash(int intersection_id, int graph_size);
+Street* get_closest_street(double user_lat, double user_lon, Street* all_streets);
+double haversine(Position posA, Position posB);
 #endif

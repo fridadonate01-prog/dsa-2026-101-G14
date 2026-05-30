@@ -453,26 +453,22 @@ Street* get_closest_street(double user_lat, double user_lon, Street* all_streets
     Street* closest_street = NULL;
     double min_distance = DBL_MAX; // El número más grande posible para empezar
 
-    // Empaquetamos la posición del usuario
     Position target_pos = {user_lat, user_lon};
 
     while (current != NULL) {
-        // 🎯 ¡MAGIA!: Usamos el punto medio que YA calculasteis en load_streets
         Position mid_pos = {current->mid_lat, current->mid_lon};
 
-        // Calculamos la distancia con vuestra fórmula Haversine
         double distance = haversine(target_pos, mid_pos);
 
-        // Si es la más cercana hasta ahora, la guardamos
         if (distance < min_distance) {
             min_distance = distance;
             closest_street = current;
         }
 
-        current = current->next; // Avanzamos a la siguiente calle
+        current = current->next;
     }
 
-    return closest_street; // Devolvemos la calle ganadora
+    return closest_street; 
 }
 
 
