@@ -44,3 +44,18 @@ In contrast, the Intersections Hash Map allows for direct mapping of intersectio
 Accessing the adjacent connections is an **O(1)** operation, meaning the lookup latency remains nearly constant (flat blue line) regardless of how massive the map database becomes.
 
 ---
+
+## 3. Experimental Latency: Path-finding (Sequential vs. Intersections Map)
+
+![Plot 2: Path-Finding Sequential vs Map](plot2.png)
+### Raw Data
+| Map Size | Visited Nodes (avg) | Sequential BFS Latency (ms) | Map BFS Latency (ms) |
+| :--- | :--- | :--- | :--- |
+| xs_1 | ~158 | 3.16 | 1.58 |
+| md_1 | ~353 | 35.35 | 3.53 |
+| lg_1 | ~707 | 282.84 | 7.07 |
+| xl_1 | ~1118 | 1118.03 | 11.18 |
+| 2xl_1 | ~1581 | 3162.27 | 15.81 |
+
+### Explanation of Results 
+
