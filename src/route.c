@@ -287,7 +287,7 @@ void print_route_directions(StreetNode* route) {
     StreetNode* curr = route;
     int step = 1;
 
-    // Print the strating street
+    // Print the starting street
     printf("%d. Start at %s and continue for %dm\n", step++, curr->street->street_name, curr->street->length);
 
     while (curr != NULL && curr->next != NULL) {
@@ -307,5 +307,5 @@ void print_route_directions(StreetNode* route) {
 
         curr = curr->next;  // Advance to the next street segment
     }
-    printf("--- You have arrived to you destination ---\n");
+    printf("--- You have arrived to your destination ---\n");
 }
