@@ -58,6 +58,8 @@ typedef struct IntersectionBucket {
 
 
 //DECLARATIONS:
+void free_houses(House* head);
+void free_place(Place* head);
 House* load_houses(const char* f);
 Place* load_places(const char* f);
 void find_address(House* head);

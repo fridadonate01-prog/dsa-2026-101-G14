@@ -25,3 +25,20 @@ Because it iterates through all `S` streets for every single one of the `V` stre
 ---
 
 ## 2. Experimental Latency: Sequential vs. Intersections 
+
+![Plot1: Sequential vs Map Initialization](plot1_image_path.png)
+
+### Raw Data
+| Map Size | Sequential Lookup Latency (ms) | Intersections Map Lookup Latency (ms) |
+| :--- | :--- | :--- |
+| xs_1 | [Data] | [Data] |
+| md_1 | [Data] | [Data] |
+| lg_1 | [Data] | [Data] |
+| xl_1 | [Data] | [Data] |
+
+### Explanation of Results
+The plot demonstrates a difference in performance as the map size scales. 
+Finding connected streets sequentially requires iterating through the entire list of `S` streets for every node. As the map grows, the latency increases lineraly.
+In contrast, using the intersections map allows for `O(1)` direct access to connected streets. The map lookup latency remains nearly constant regardless of how massive the map database becomes.
+
+---
