@@ -60,8 +60,11 @@ typedef struct IntersectionBucket {
 //DECLARATIONS:
 void free_houses(House* head);
 void free_place(Place* head);
+void free_streets(Street* head);
 House* load_houses(const char* f);
 Place* load_places(const char* f);
+void load_streets(const char* f, Street** street_head, Node** nodes_head, int* GridSize);
+void street_to_intersection (IntersectionBucket** graph, int graph_size, int target_id, Street* street);
 void find_address(House* head);
 void find_place(Place* head);
 int intersection_hash(int intersection_id, int graph_size);

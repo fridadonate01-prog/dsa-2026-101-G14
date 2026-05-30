@@ -25,6 +25,16 @@ void free_place(Place* head) {
    }
 }
 
+void free_streets(Street* head){
+    Street* curr = head;
+    while(curr != NULL){
+        Street* next_node = curr->next;
+        free(curr);
+        curr = next_node;
+
+    }
+}
+
 //we need to get into the file and store houses in a linked list
 House* load_houses(const char* f){
     FILE* file = fopen(f, "r");//open file to read it
