@@ -115,13 +115,13 @@ void free_path(StreetNode* head) {
 }
 
 // The Pathfinding Function
-StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets) {
+StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets, IntersectionBucket** graph, int graph_size) {
     // Edge case check
     if (!fromStreet || !toStreet || !all_streets) {
         return NULL;
     }
 
-    // *Optimization BFS: Reset all street visited flags to 0 (we eliminate the linked list, visited)
+    // *Optimization BFS: Reset all street visited flags to 0
     Street* reset_curr = all_streets;
     while (reset_curr != NULL) {
         reset_curr->visited = 0;
@@ -136,10 +136,11 @@ StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets
     StreetNode* initial_path = NULL;
     append_street(&initial_path, fromStreet);
 
-    // Enqueue initial_path intp Q
+    // Enqueue initial_path into Q
+    fromStreet->visited = 1;
     enqueue(&Q, initial_path);
 
-    StreetNode* final_route = NULL;   // To track if we successfully find the path
+    StreetNode* final_route = NULL;   
 
     while (!is_queue_empty(&Q)) {
         
@@ -152,43 +153,52 @@ StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets
         }
         Street* current_street = tracking->street;
 
-        // If current_street == to Street: return path
         if (current_street == toStreet) {
             final_route = path;
             break;
         }
 
-        // *Optimization BFS: O(1) check instead of looping through a visited list
-        if (!current_street->visited) {
-            current_street->visited = 1;    // Marked as visited instantly
+        int intersections_to_check[2] = {current_street->start.id, current_street->end.id};
 
-            // For connected_street in intersections_graph[current_street.to_intersection_id]:
-            // We scan the map database to find any street connected to current_Street
-            Street* connected_street = all_streets;
-            while (connected_street != NULL) {
+        for (int i = 0; i < 2; i++) {
+            int target_id = intersections_to_check[i];
+            int index = intersection_hash(target_id, graph_size);
 
-                //Connection rule: they share a starting or ending intersection ID
-                int is_connected = (connected_street != current_street) && (connected_street->start.id == current_street->start.id || connected_street->start.id == current_street->end.id || connected_street->end.id == current_street->start.id || connected_street->end.id == current_street->end.id);
+            IntersectionBucket* current_bucket = graph[index];
 
-                // *Optimization BFS: O(1) check for neighbor
-                if (is_connected) {
-                    if (!connected_street->visited) {
-                        StreetNode* new_path = clone_path(path);
-                        append_street(&new_path, connected_street);
-                        enqueue(&Q, new_path);
-                    }
+            while (current_bucket != NULL) {
+                if (current_bucket->intersection_id == target_id) {
+                    break;
                 }
-                connected_street = connected_street->next;  // To keep scanning map
+                current_bucket = current_bucket->next;
+            }
+
+            if (current_bucket != NULL) {
+                StreetNode* neighbor_node = current_bucket->connected_streets;
+
+                while (neighbor_node != NULL) {
+                    Street* connected_street = neighbor_node->street;
+                    
+                    if (connected_street != current_street) {
+                        if (!connected_street->visited) {
+                            connected_street->visited = 1; 
+                            
+                            StreetNode* new_path = clone_path(path);
+                            append_street(&new_path, connected_street);
+                            enqueue(&Q, new_path);
+                        }
+                    }
+                    neighbor_node = neighbor_node->next; 
+                }
             }
         }
 
-        // If this wasn't our target path, free its temporary list copy to avoid memory leaks
+        // If this wasn't our target path, free its temporary list copy
         if (final_route != path) {
             free_path(path);
         }
     }
 
-    // If we exited early but things are still left in the queue, we clean them out
     while (!is_queue_empty(&Q)) {
         StreetNode* leftover = dequeue(&Q);
         free_path(leftover);

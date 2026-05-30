@@ -64,5 +64,5 @@ House* load_houses(const char* f);
 Place* load_places(const char* f);
 void find_address(House* head);
 void find_place(Place* head);
-
+int intersection_hash(int intersection_id, int graph_size);
 #endif

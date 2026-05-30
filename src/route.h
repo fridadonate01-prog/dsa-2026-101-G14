@@ -21,7 +21,7 @@ int is_queue_empty(Queue* q);
 
 void append_street(StreetNode** head, Street* street);
 void free_path(StreetNode* head);
-StreetNode* find_route(Street* origin_street, Street* dest_street, Street* all_streets);
+StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets, IntersectionBucket** graph, int graph_size);
 
 double toRadians(double degree);
 void latlon_to_xy(double lat_ref, double lon_ref, double lat, double lon, double *x, double *y);
