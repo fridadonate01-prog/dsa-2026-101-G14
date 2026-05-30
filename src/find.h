@@ -28,6 +28,8 @@ typedef struct {
 typedef struct Street{
     Node start;
     Node end;
+    double mid_lat;
+    double mid_lon;
     int length;
     char street_name[100];
     int visited;

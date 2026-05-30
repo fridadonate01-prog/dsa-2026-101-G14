@@ -224,7 +224,8 @@ void load_streets(const char* f, Street** street_head, Node** nodes_head, int* G
         nodes[id2].lat=lat2;
         nodes[id2].lon=lon2;
         nodes[id2].id=id2;
-
+        new_street->mid_lat = (lat1 + lat2) / 2.0;
+        new_street->mid_lon = (lon1 + lon2) / 2.0;
         new_street->next= head;
         head = new_street;
       } else {
@@ -312,20 +313,17 @@ int hash_function(int row, int col, int grid_size) { //grid size will be given b
 //Function that takes a street and allocates it into its respective GridBox
 void street_to_box (Street* street,GridBox** GridBoxes, int grid_size){ //receives the head pointer of all grid boxes (the main grid)
 
-    int grid_x1, grid_y1; //CHANGE! do for midpoint instead
-    get_grid_index(street->start.lon,street->start.lat,&grid_x1,&grid_y1);
+    int grid_x, grid_y; 
+    
+    get_grid_index(street->mid_lon, street->mid_lat, &grid_x, &grid_y);
+    
+    int index = hash_function(grid_x, grid_y, grid_size);
 
-    int grid_x2, grid_y2;
-    get_grid_index(street->end.lon,street->end.lat,&grid_x2,&grid_y2);
-
-    int index1=hash_function(grid_x1,grid_y1,grid_size);
-    int index2=hash_function(grid_x2,grid_y2,grid_size);
-
-    GridBox* current_box = GridBoxes[index1];
+    GridBox* current_box = GridBoxes[index];
     GridBox* target_box = NULL;
 
-    while (current_box != NULL) {//find target box
-        if (current_box->col == grid_x1 && current_box->row == grid_y1) {
+    while (current_box != NULL) {
+        if (current_box->col == grid_x && current_box->row == grid_y) {
             target_box = current_box;
             break;
         }
@@ -335,15 +333,14 @@ void street_to_box (Street* street,GridBox** GridBoxes, int grid_size){ //receiv
     //if gridBox with that row and col doesn't exist, create it.
     if (target_box == NULL) {
         target_box = malloc(sizeof(GridBox));
-        if (target_box == NULL) return; //malloc check
+        if (target_box == NULL) return; 
 
-        target_box->col = grid_x1;
-        target_box->row = grid_y1;
+        target_box->col = grid_x;
+        target_box->row = grid_y;
         target_box->streets = NULL; 
         
-        // Insert at the head of the hash array linked list
-        target_box->next = GridBoxes[index1];
-        GridBoxes[index1] = target_box;
+        target_box->next = GridBoxes[index];
+        GridBoxes[index] = target_box;
     }
 
     // insert the street into the target box street list
