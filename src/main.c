@@ -70,7 +70,7 @@ int main() {
   if (origin_street != NULL && dest_street != NULL) {
     
     // Start Timer
-    clock_t start = clocl();
+    clock_t start = clock();
 
     StreetNode* final_route = find_route(origin_street, dest_street, all_streets);
 
