@@ -94,7 +94,6 @@ int main() {
     while (curr_st != NULL) {
       // Connect each street to both of its intersection nodes
       street_to_intersection(graph, grid_size, curr_st->start.id, curr_st);
-      street_to_intersection(graph, grid_size, curr_st->end.id, curr_st);
       curr_st = curr_st->next;
     }
   }

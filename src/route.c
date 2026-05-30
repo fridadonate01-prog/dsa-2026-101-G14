@@ -117,9 +117,7 @@ void free_path(StreetNode* head) {
 
 // The Pathfinding Function
 StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets, IntersectionBucket** graph, int graph_size) {
-    if (!fromStreet || !toStreet || !all_streets) {
-        return NULL;
-    }
+    if (!fromStreet || !toStreet || !all_streets) return NULL;
 
     Street* reset_curr = all_streets;
     while (reset_curr != NULL) {
@@ -132,13 +130,20 @@ StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets
 
     StreetNode* initial_path = NULL;
     append_street(&initial_path, fromStreet);
-
     fromStreet->visited = 1;
     enqueue(&Q, initial_path);
 
-    StreetNode* final_route = NULL;   
+    StreetNode* final_route = NULL;
+    int total_pasos = 0;
+    int calles_descubiertas = 0;
+
+    printf("\n--- [TEST DIRIGIDO] --- \n");
+    printf("ORIGEN : %s (ID Inicio: %lld -> ID Fin: %lld)\n", fromStreet->street_name, (long long)fromStreet->start.id, (long long)fromStreet->end.id);
+    printf("DESTINO: %s (ID Inicio: %lld -> ID Fin: %lld)\n", toStreet->street_name, (long long)toStreet->start.id, (long long)toStreet->end.id);
+    printf("----------------------- \n");
 
     while (!is_queue_empty(&Q)) {
+        total_pasos++;
         StreetNode* path = dequeue(&Q);
 
         StreetNode* tracking = path;
@@ -147,51 +152,58 @@ StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets
         }
         Street* current_street = tracking->street;
 
-        if (current_street == toStreet) {
+
+        if (current_street == toStreet || 
+            current_street->end.id == toStreet->start.id || 
+            current_street->end.id == toStreet->end.id) {
+            
+            if (current_street != toStreet) {
+                append_street(&path, toStreet);
+            }
+            
+            printf("[TEST] ¡DESTINO ENCONTRADO EN EL PASO %d!\n", total_pasos);
             final_route = path;
             break;
         }
 
-        // IDs guardados como long long
-        long long intersections_to_check[2] = {current_street->start.id, current_street->end.id};
+        long long target_id = current_street->end.id;
+        int index = intersection_hash(target_id, graph_size);
 
-        for (int i = 0; i < 2; i++) {
-            long long target_id = intersections_to_check[i];
-            int index = intersection_hash(target_id, graph_size);
+        IntersectionBucket* current_bucket = graph[index];
+        while (current_bucket != NULL) {
+            if (current_bucket->intersection_id == target_id) break;
+            current_bucket = current_bucket->next;
+        }
 
-            IntersectionBucket* current_bucket = graph[index];
-
-            while (current_bucket != NULL) {
-                if (current_bucket->intersection_id == target_id) {
-                    break;
-                }
-                current_bucket = current_bucket->next;
-            }
-
-            if (current_bucket != NULL) {
-                StreetNode* neighbor_node = current_bucket->connected_streets;
-
-                while (neighbor_node != NULL) {
-                    Street* connected_street = neighbor_node->street;
-                    
-                    if (connected_street != current_street) {
-                        if (!connected_street->visited) {
-                            connected_street->visited = 1; 
-                            
-                            StreetNode* new_path = clone_path(path);
-                            append_street(&new_path, connected_street);
-                            enqueue(&Q, new_path);
-                        }
+        if (current_bucket != NULL) {
+            StreetNode* neighbor_node = current_bucket->connected_streets;
+            while (neighbor_node != NULL) {
+                Street* connected_street = neighbor_node->street;
+                if (connected_street != current_street) {
+                    if (!connected_street->visited) {
+                        connected_street->visited = 1; 
+                        calles_descubiertas++;
+                        StreetNode* new_path = clone_path(path);
+                        append_street(&new_path, connected_street);
+                        enqueue(&Q, new_path);
                     }
-                    neighbor_node = neighbor_node->next; 
                 }
+                neighbor_node = neighbor_node->next; 
             }
         }
 
         if (final_route != path) {
             free_path(path);
         }
+        
+        if (total_pasos % 10000 == 0) {
+            printf("[TEST] %d calles analizadas. El BFS sigue buscando...\n", total_pasos);
+        }
     }
+
+    printf("\n[TEST RESULTADO] Busqueda terminada.\n");
+    printf("- Pasos totales (Calles extraidas de la cola): %d\n", total_pasos);
+    printf("- Total de calles unicas exploradas en la ciudad: %d\n", calles_descubiertas);
 
     while (!is_queue_empty(&Q)) {
         StreetNode* leftover = dequeue(&Q);

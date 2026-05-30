@@ -3,7 +3,6 @@
 #include <string.h>
 #include <strings.h> // Required for strcasecmp
 #include "find.h"
-#include <ctype.h>
 #include "streets_utils.h"
 #include "levenshtein.h"
 #include <float.h> 
