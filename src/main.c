@@ -18,7 +18,7 @@ int main() {
   char street_file_path[100];
   sprintf(street_file_path, "../maps/%s/streets.txt", all_maps[chosen_map]);
 
-  // Set up the 4 required parameters to call load_streets
+  // Set up the 4 required parameters to call loading functions
   Street* all_streets = NULL;
   Node* all_nodes = NULL;
   int grid_size = 0;
@@ -45,7 +45,7 @@ int main() {
 
     Place* my_places= load_places(file_path); //pointer to the first place
 
-    find_place(my_places);
+    origin_street = find_place(my_places, all_streets);
     free_place(my_places);
   } else{
     printf("Not implemented yet. \n");
@@ -63,7 +63,7 @@ int main() {
   else if (chosen_dest == 2) {  // the user chose place
     sprintf(file_path, "../maps/%s/places.txt", all_maps[chosen_map]);
     Place* dest_places = load_places(file_path);
-    find_place(dest_places);
+    dest_street=find_place(dest_places,all_streets);
     free_place(dest_places);
   }
   else {

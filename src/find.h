@@ -71,7 +71,7 @@ Place* load_places(const char* f);
 void load_streets(const char* f, Street** street_head, Node** nodes_head, int* GridSize);
 void street_to_intersection(IntersectionBucket** graph, int graph_size, long long target_id, Street* street);
 Street* find_address(House* head, Street* all_streets) ;
-void find_place(Place* head);
+Street* find_place(Place* places_list, Street* all_streets);
 int intersection_hash(long long target_id, int graph_size);
 Street* get_closest_street(double user_lat, double user_lon, Street* all_streets);
 double haversine(Position posA, Position posB);
