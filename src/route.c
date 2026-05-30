@@ -137,10 +137,7 @@ StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets
     int total_pasos = 0;
     int calles_descubiertas = 0;
 
-    printf("\n--- [TEST DIRIGIDO] --- \n");
-    printf("ORIGEN : %s (ID Inicio: %lld -> ID Fin: %lld)\n", fromStreet->street_name, (long long)fromStreet->start.id, (long long)fromStreet->end.id);
-    printf("DESTINO: %s (ID Inicio: %lld -> ID Fin: %lld)\n", toStreet->street_name, (long long)toStreet->start.id, (long long)toStreet->end.id);
-    printf("----------------------- \n");
+
 
     while (!is_queue_empty(&Q)) {
         total_pasos++;
@@ -161,7 +158,6 @@ StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets
                 append_street(&path, toStreet);
             }
             
-            printf("[TEST] ¡DESTINO ENCONTRADO EN EL PASO %d!\n", total_pasos);
             final_route = path;
             break;
         }
