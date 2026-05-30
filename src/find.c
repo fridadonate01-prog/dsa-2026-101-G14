@@ -7,6 +7,24 @@
 #include "streets_utils.h"
 #include "levenshtein.h"
 
+void free_houses(House* head) {
+   House* temp;
+   while (head != NULL) {
+       temp = head;
+       head = head->next;
+       free(temp);
+   }
+}
+
+void free_place(Place* head) {
+   Place* temp;
+   while (head != NULL) {
+       temp = head;
+       head = head->next;
+       free(temp);
+   }
+}
+
 //we need to get into the file and store houses in a linked list
 House* load_houses(const char* f){
     FILE* file = fopen(f, "r");//open file to read it

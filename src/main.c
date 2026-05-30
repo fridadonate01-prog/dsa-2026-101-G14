@@ -6,24 +6,6 @@
 #include "find.h"
 #include "route.h"
 
-void free_houses(House* head) {
-   House* temp;
-   while (head != NULL) {
-       temp = head;
-       head = head->next;
-       free(temp);
-   }
-}
-
-void free_place(Place* head) {
-   Place* temp;
-   while (head != NULL) {
-       temp = head;
-       head = head->next;
-       free(temp);
-   }
-}
-
 int main() {
   // Array of string pointers
   const char * all_maps[] = {"xs_1", "xs_2", "md_1", "lg_1", "xl_1", "2xl_1"}; 
