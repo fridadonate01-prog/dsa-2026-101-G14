@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include "route.h"
 #include "find.h"
 
@@ -270,35 +271,65 @@ int get_turn_direction(Street* s1, Street* s2) {
         return 0;   // Straight
     }
 }
-
 void print_route_directions(StreetNode* route) {
     if (route == NULL) {
         printf("\nSorry, no route could be found between these locations.\n");
         return;
     }
     printf("\n--- ROUTE ---\n");
+
     StreetNode* curr = route;
     int step = 1;
 
-    // Print the starting street
-    printf("%d. Start at %s and continue for %lfm\n", step++, curr->street->street_name, curr->street->length);
+    // 1. Arrancamos con la primera calle
+    char* current_name = curr->street->street_name;
+    double accumulated_length = curr->street->length;
+    Street* last_segment_of_current_street = curr->street;
 
-    while (curr != NULL && curr->next != NULL) {
-        Street* current_street = curr->street;
-        Street* next_street = curr->next->street;
+    curr = curr->next;
 
-        // Use the cross-product function to look ahead at the intersection
-        int turn = get_turn_direction(current_street, next_street);
+    // Acumulamos todos los tramos que sigan siendo de la primera calle
+    while (curr != NULL && strcmp(curr->street->street_name, current_name) == 0) {
+        accumulated_length += curr->street->length;
+        last_segment_of_current_street = curr->street;
+        curr = curr->next;
+    }
 
-        if (turn == 1) {
-            printf("%d. Turn left to %s and continue for %lfm\n", step++, next_street->street_name, next_street->length);
-        } else if (turn == -1) {
-            printf("%d. Turn right to %s and continue for %lfm\n", step++, next_street->street_name, next_street->length);
-        } else {
-            printf("%d. Continue straight to %s and continue for %lfm\n", step++, next_street->street_name, next_street->length);
+    // Imprimimos el paso inicial ya con todos sus metros sumados
+    printf("%d. Start at %s and continue for %.2fm\n", step++, current_name, accumulated_length);
+
+    // 2. Procesamos el resto de las calles
+    while (curr != NULL) {
+        Street* first_segment_of_new_street = curr->street;
+        char* new_name = first_segment_of_new_street->street_name;
+        double new_accumulated_length = first_segment_of_new_street->length;
+
+        // Calculamos el giro usando el cambio de calle exacto
+        int turn = get_turn_direction(last_segment_of_current_street, first_segment_of_new_street);
+
+        // Avanzamos y acumulamos los metros de esta nueva calle
+        Street* current_segment = first_segment_of_new_street;
+        curr = curr->next;
+        
+        while (curr != NULL && strcmp(curr->street->street_name, new_name) == 0) {
+            new_accumulated_length += curr->street->length;
+            current_segment = curr->street; // Guardamos este tramo por si es el último
+            curr = curr->next;
         }
 
-        curr = curr->next;  // Advance to the next street segment
+        // Imprimimos la instrucción ya agrupada
+        if (turn == 1) {
+            printf("%d. Turn left to %s and continue for %.2fm\n", step++, new_name, new_accumulated_length);
+        } else if (turn == -1) {
+            printf("%d. Turn right to %s and continue for %.2fm\n", step++, new_name, new_accumulated_length);
+        } else {
+            printf("%d. Continue straight to %s and continue for %.2fm\n", step++, new_name, new_accumulated_length);
+        }
+
+        // Actualizamos las variables para el siguiente cambio de calle
+        last_segment_of_current_street = current_segment;
+        current_name = new_name;
     }
+
     printf("--- You have arrived to your destination ---\n");
 }
