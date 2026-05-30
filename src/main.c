@@ -100,23 +100,6 @@ int main() {
       }
     }
   }
-  if (all_streets == NULL) {
-      printf("\n[CRITICAL ERROR]: all_streets is empty (NULL). Check your load_streets function or the file path to streets.txt.\n");
-      return 1; // Salimos antes de explotar
-  }
-
-  if (origin_street == NULL) {
-      printf("\n[ERROR]: Could not calculate the closest origin street.\n");
-  } else {
-      printf("TEST, here origin street is worth: %s\n", origin_street->street_name);
-  }
-
-  if (dest_street == NULL) {
-      printf("\n[ERROR]: Could not calculate the closest destination street.\n");
-  } else {
-      printf("TEST, here dest street is worth: %s\n", dest_street->street_name);
-  }
-
 
 // Initialize and fill the Intersection Hash Map Graph before routing
   IntersectionBucket** graph = calloc(grid_size, sizeof(IntersectionBucket*));
@@ -150,6 +133,8 @@ int main() {
     print_route_directions(final_route);
 
     free_path(final_route);
+  } else {
+    printf("\n[Error]: Unable to generate route. Please ensure both origin and destination are valid. \n");
   }
   
   // Clean up all dynamically allocated graph memory safely
