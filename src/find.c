@@ -6,6 +6,10 @@
 #include <ctype.h>
 #include "streets_utils.h"
 #include "levenshtein.h"
+#include <float.h> 
+#include <math.h>
+#include "route.h"
+#define EARTH_RADIUS 6371.0
 
 void free_houses(House* head) {
    House* temp;
@@ -428,3 +432,49 @@ void street_to_intersection (IntersectionBucket** graph, int graph_size, int tar
     }
 
 }
+
+double haversine(Position posA, Position posB) {
+    double lat1 = toRadians(posA.lat);
+    double lon1 = toRadians(posA.lon);
+    double lat2 = toRadians(posB.lat);
+    double lon2 = toRadians(posB.lon);
+
+    double dLat = lat2 - lat1;
+    double dLon = lon2 - lon1;
+    double a = pow(sin(dLat / 2), 2) +
+               cos(lat1) * cos(lat2) * pow(sin(dLon / 2), 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    return EARTH_RADIUS * c;
+}
+
+
+Street* get_closest_street(double user_lat, double user_lon, Street* all_streets) {
+    Street* current = all_streets;
+    Street* closest_street = NULL;
+    double min_distance = DBL_MAX; // El número más grande posible para empezar
+
+    // Empaquetamos la posición del usuario
+    Position target_pos = {user_lat, user_lon};
+
+    while (current != NULL) {
+        // 🎯 ¡MAGIA!: Usamos el punto medio que YA calculasteis en load_streets
+        Position mid_pos = {current->mid_lat, current->mid_lon};
+
+        // Calculamos la distancia con vuestra fórmula Haversine
+        double distance = haversine(target_pos, mid_pos);
+
+        // Si es la más cercana hasta ahora, la guardamos
+        if (distance < min_distance) {
+            min_distance = distance;
+            closest_street = current;
+        }
+
+        current = current->next; // Avanzamos a la siguiente calle
+    }
+
+    return closest_street; // Devolvemos la calle ganadora
+}
+
+
+
+

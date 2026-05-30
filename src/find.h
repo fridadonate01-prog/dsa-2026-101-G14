@@ -57,6 +57,12 @@ typedef struct IntersectionBucket {
 } IntersectionBucket;
 
 
+typedef struct position {
+    double lat;
+    double lon;
+} Position;
+
+
 //DECLARATIONS:
 void free_houses(House* head);
 void free_place(Place* head);
