@@ -17,7 +17,12 @@ int main() {
   // We need to load the map's streets so the BFS algorithm can use them
   char street_file_path[100];
   sprintf(street_file_path, "maps/%s/streets.txt", all_maps[chosen_map]);
-  Street* all_streets = load_streets(street_file_path);
+
+  // Set up the 4 required parameters to call load_streets
+  Street* all_streets = NULL;
+  Node* all_nodes = NULL;
+  int grid_size = 0;
+  load_streets(street_file_path, &all_streets, &all_nodes, &grid_size);
 
   // Variables to hold the starting and ending streets
   Street* origin_street = NULL;
@@ -47,7 +52,7 @@ int main() {
   }
 
   //DESTINATION SECTION
-  int chosen_dest = choosen_destination();
+  int chosen_dest = choose_destination();
 
   if (chosen_dest == 1) { // the user chose address
     sprintf(file_path, "maps/%s/houses.txt", all_maps[chosen_map]);
@@ -65,6 +70,18 @@ int main() {
     printf("Not implemented yet. \n");
   }
 
+  // Initialize and fill the Intersection Hash Map Graph before routing
+  IntersectionBucket** graph = calloc(grid_size, sizeof(IntersectionBucket*));
+  if (graph != NULL) {
+    Street* curr_st = all_streets;
+    while (curr_st != NULL) {
+      // Connect each street to both of its intersection nodes
+      street_to_intersection(graph, grid_size, curr_st->start.id, curr_st);
+      street_to_intersection(graph, grid_size, curr_st->end.id, curr_st);
+      curr_st = curr_st->next;
+    }
+  }
+
   // GENERATE AND PRINT THE ROUTE
   // If both an origin and destination were succesfully found, run the BFS
   if (origin_street != NULL && dest_street != NULL) {
@@ -72,7 +89,7 @@ int main() {
     // Start Timer
     clock_t start = clock();
 
-    StreetNode* final_route = find_route(origin_street, dest_street, all_streets);
+    StreetNode* final_route = find_route(origin_street, dest_street, all_streets, graph, grid_size);
 
     // Stop Timer
     clock_t end = clock();
@@ -87,7 +104,30 @@ int main() {
     free_path(final_route);
   }
   
+  // Clean up all dynamically allocated graph memory safely
   free_streets(all_streets);
+  if (all_nodes != NULL) {
+    free(all_nodes);
+  }
+  if (graph != NULL) {
+    for (int i = 0; i < grid_size; i++) {
+      IntersectionBucket* curr_bucket = graph[i];
+      while(curr_bucket != NULL) {
+        IntersectionBucket* temp_bucket = curr_bucket;
+        curr_bucket = curr_bucket->next;
+
+       // Free the internal linked list node wrappers
+        StreetNode* curr_sn = temp_bucket->connected_streets;
+        while (curr_sn != NULL) {
+          StreetNode* temp_sn = curr_sn;
+          curr_sn = curr_sn->next;
+          free(temp_sn);
+        }
+        free(temp_bucket);
+      }
+    }
+    free(graph);
+  }
 
   return 0;
 }
