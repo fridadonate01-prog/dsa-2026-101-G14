@@ -16,7 +16,7 @@ int main() {
 
   // We need to load the map's streets so the BFS algorithm can use them
   char street_file_path[100];
-  sprintf(street_file_path, "maps/%s/streets.txt", all_maps[chosen_map]);
+  sprintf(street_file_path, "../maps/%s/streets.txt", all_maps[chosen_map]);
 
   // Set up the 4 required parameters to call load_streets
   Street* all_streets = NULL;
@@ -33,7 +33,7 @@ int main() {
   char file_path[100];
   if (chosen_input==1){//the user chose address
     // Construct path: assuming execution from 'src' folder
-    sprintf(file_path, "maps/%s/houses.txt", all_maps[chosen_map]);//file path contains the name of the file path to the houses
+    sprintf(file_path, "../maps/%s/houses.txt", all_maps[chosen_map]);//file path contains the name of the file path to the houses
 
     House* my_houses = load_houses(file_path); //pointer to the first house
 
@@ -41,7 +41,7 @@ int main() {
     free_houses(my_houses);
   } else if(chosen_input==2){//the user chose place
     //Construct path: assuming execution form 'src' folder
-    sprintf(file_path,"maps/%s/places.txt", all_maps[chosen_map]);//file path contains the name of the file path to the places
+    sprintf(file_path,"../maps/%s/places.txt", all_maps[chosen_map]);//file path contains the name of the file path to the places
 
     Place* my_places= load_places(file_path); //pointer to the first place
 
@@ -55,13 +55,13 @@ int main() {
   int chosen_dest = choose_destination();
 
   if (chosen_dest == 1) { // the user chose address
-    sprintf(file_path, "maps/%s/houses.txt", all_maps[chosen_map]);
+    sprintf(file_path, "../maps/%s/houses.txt", all_maps[chosen_map]);
     House* dest_houses = load_houses(file_path);
     find_address(dest_houses);
     free_houses(dest_houses);
   }
   else if (chosen_dest == 2) {  // the user chose place
-    sprintf(file_path, "maps/%s/places.txt", all_maps[chosen_map]);
+    sprintf(file_path, "../maps/%s/places.txt", all_maps[chosen_map]);
     Place* dest_places = load_places(file_path);
     find_place(dest_places);
     free_place(dest_places);
