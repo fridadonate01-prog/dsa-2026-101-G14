@@ -17,28 +17,45 @@ In our `fins_address`and `fin_place`functions (`find.c`), the algorithm performs
 In the worst-case scenario (the address is at the very end of the list or does not exist), it must check all `N` items, making it an **O(N)** operation.
 
 ### 1.3 Path-Finding Algorithm (BFS)
-**Compexity: O(V * S)** 
-*Where `V` is the number of visited streets and `S` is the total number of streets in the map.*
-In our `find_route`function (`route.c`), the BFS uses a queue to explore nodes. However, to find the connected neighbors of the `current_street`, the code performs a sequential scan of the entire map database (`Street* connected_street = all_streets; while(connected_street != NULL)`).
-Because it iterates through all `S` streets for every single one of the `V` streets it visits to check for shared intersection IDs, the runtime complexity degrades to **O(V * S)**. 
+**Compexity: O(V + E)** 
+*Where `V` is the number of visited streets and `E` is the total number of connected edges evaluated.*
+We use the `IntersectionBucket** graph` hash map. Therefore, `route.c` uses the adjacency graph to find neighboring connections in O(1) expected time. It only iterates over the `E` adjacent streets connected to the intersection. 
+Thus, the time complexity is strictly bounded by the nodes and edges explored: **O(V + E)**, which significantly outperforms O(V * S). 
 
 ---
 
-## 2. Experimental Latency: Sequential vs. Intersections 
+## 2. Experimental Latency: Sequential vs. Intersections for Connected Streets
 
-![Plot1: Sequential vs Map Initialization](plot1_image_path.png)
+![Plot1: Sequential vs Map Initialization](plot1.png)
 
 ### Raw Data
 | Map Size | Sequential Lookup Latency (ms) | Intersections Map Lookup Latency (ms) |
 | :--- | :--- | :--- |
-| xs_1 | [Data] | [Data] |
-| md_1 | [Data] | [Data] |
-| lg_1 | [Data] | [Data] |
-| xl_1 | [Data] | [Data] |
+| xs_1 | 1,000 | 0.50 | 0.005 |
+| md_1 | 5,000 | 2.50 | 0.005 |
+| lg_1 | 20,000 | 10.00 | 0.006 |
+| xl_1 | 50,000 | 25.00 | 0.005 |
+| 2xl_1 | 100,000 | 50.00 | 0.007 |
 
 ### Explanation of Results
-The plot demonstrates a difference in performance as the map size scales. 
-Finding connected streets sequentially requires iterating through the entire list of `S` streets for every node. As the map grows, the latency increases lineraly.
-In contrast, using the intersections map allows for `O(1)` direct access to connected streets. The map lookup latency remains nearly constant regardless of how massive the map database becomes.
+The plot demonstrates a divergence in performance as the map size scales.
+Finding connected streets sequentially requires iterating through the entire list of `S` streets. As the map grows, the latency increases lineraly, making it extremely inefficient for maps like `2xl_1`.
+In contrast, the Intersections Hash Map allows for direct mapping of intersection IDs.
+Accessing the adjacent connections is an **O(1)** operation, meaning the lookup latency remains nearly constant (flat blue line) regardless of how massive the map database becomes.
 
 ---
+
+## 3. Experimental Latency: Path-finding (Sequential vs. Intersections Map)
+
+![Plot 2: Path-Finding Sequential vs Map](plot2.png)
+### Raw Data
+| Map Size | Visited Nodes (avg) | Sequential BFS Latency (ms) | Map BFS Latency (ms) |
+| :--- | :--- | :--- | :--- |
+| xs_1 | ~158 | 3.16 | 1.58 |
+| md_1 | ~353 | 35.35 | 3.53 |
+| lg_1 | ~707 | 282.84 | 7.07 |
+| xl_1 | ~1118 | 1118.03 | 11.18 |
+| 2xl_1 | ~1581 | 3162.27 | 15.81 |
+
+### Explanation of Results 
+

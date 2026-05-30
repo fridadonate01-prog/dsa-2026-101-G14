@@ -465,7 +465,3 @@ Street* get_closest_street(double user_lat, double user_lon, Street* all_streets
 
     return closest_street; 
 }
-
-
-
-
