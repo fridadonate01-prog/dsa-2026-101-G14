@@ -20,7 +20,7 @@ typedef struct Place{
 } Place;
 
 typedef struct {
-    int id;
+    double id;
     double lat;
     double lon;
 } Node;
@@ -30,7 +30,7 @@ typedef struct Street{
     Node end;
     double mid_lat;
     double mid_lon;
-    int length;
+    double length;
     char street_name[100];
     int visited;
     struct Street *next;
@@ -51,11 +51,10 @@ typedef struct GridBox{
 
 //New structure for Intersection Hash Map
 typedef struct IntersectionBucket {
-    int intersection_id;
-    StreetNode* connected_streets;//all streets connected to this intersection
-    struct IntersectionBucket* next;//for chainning (collisions)
+    long long intersection_id; // ¡Antes era int!
+    StreetNode* connected_streets;
+    struct IntersectionBucket* next;
 } IntersectionBucket;
-
 
 typedef struct position {
     double lat;
@@ -70,10 +69,10 @@ void free_streets(Street* head);
 House* load_houses(const char* f);
 Place* load_places(const char* f);
 void load_streets(const char* f, Street** street_head, Node** nodes_head, int* GridSize);
-void street_to_intersection (IntersectionBucket** graph, int graph_size, int target_id, Street* street);
-void find_address(House* head);
+void street_to_intersection(IntersectionBucket** graph, int graph_size, long long target_id, Street* street);
+Street* find_address(House* head, Street* all_streets) ;
 void find_place(Place* head);
-int intersection_hash(int intersection_id, int graph_size);
+int intersection_hash(long long target_id, int graph_size);
 Street* get_closest_street(double user_lat, double user_lon, Street* all_streets);
 double haversine(Position posA, Position posB);
 #endif

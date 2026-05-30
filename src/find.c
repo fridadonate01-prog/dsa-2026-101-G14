@@ -98,58 +98,57 @@ Place* load_places(const char* f){
 }
 
 //Find and print coordinates if it chose address (1)
-void find_address (House* head){
+Street* find_address(House* head, Street* all_streets) {
     char search_street[256];
     int search_number;
 
     printf("Enter street name (e.g. \"Carrer de Roc Boronat\"): ");
-
     fgets(search_street, sizeof(search_street), stdin);
-        // Remove the newline character from the string
-        search_street[strcspn(search_street, "\n")] = 0;
+    search_street[strcspn(search_street, "\n")] = 0;
 
-    while (1){ //until we find a match
+    while (1) { 
         printf("Enter street number: ");
         if (scanf("%d", &search_number) != 1) {
             printf("Invalid number input.\n");
-            return;
-            }
-        // Clear the buffer so the next fgets works correctly
+            return NULL;
+        }
         while (getchar() != '\n');
 
-        //Sequential search to find the house
-        House* current = head;//current house pointer
-        int street_found = 0; // to check if we find the street, but not the number
+        House* current = head;
+        int street_found = 0; 
+        
         while (current != NULL) {
-            // 1. Declare buffers to store normalized names
             char norm_input[256];
             char norm_street[256]; 
             
-            // 2. Normalize both the user input and the list street
             normalizeStreetName(norm_input, search_street);
             normalizeStreetName(norm_street, current->street_name);
 
-            if (strcasecmp(norm_input, norm_street)==0 && current->house_number==search_number){
+            if (strcasecmp(norm_input, norm_street) == 0 && current->house_number == search_number) {
                 printf("Found at (%f, %f)\n", current->lat, current->lon);
-                return;
+                
+                
+                Street* closest = get_closest_street(current->lat, current->lon, all_streets);
+                
+                return closest; // Devolvemos la calle encontrada al main
             }
-            else if(strcasecmp(norm_input,norm_street)==0){ // same street, not same number!
+            else if(strcasecmp(norm_input, norm_street) == 0) {
                 street_found = 1;
             }
-            current= current->next; //not found, so look for the next
+            current = current->next; 
         }
+        
         int choice = 0;
-        if (street_found == 1){//but not number
-            printf("the street name is correct, but the number is not valid.\n");
-            printf("You have 2 options:\n");
-            printf("1. Change the number to check if the address exists.\n");
-            printf("2. Change the street name, hoping it holds your correct number address.\n");
+        if (street_found == 1) {
+            printf("The street name is correct, but the number is not valid.\n");
+            printf("You have 2 options:\n1. Change number\n2. Change street\n");
             choice = option_menu(1, 2);
         }
         if (choice == 2 || street_found == 0) {
-            strcpy(search_street, similar_streets(search_street,head));
+            strcpy(search_street, similar_streets(search_street, head));
         }
     }
+    return NULL; 
 }
 
 //Prints the coordinates based on place
@@ -198,84 +197,77 @@ int get_next_prime(int n) {
     return prime;
 }
 
-void load_streets(const char* f, Street** street_head, Node** nodes_head, int* GridSize){
-    FILE* file= fopen(f, "r");
-    if (file==NULL){
+void load_streets(const char* f, Street** street_head, Node** nodes_head, int* GridSize) {
+    FILE* file = fopen(f, "r");
+    if (file == NULL) {
+        printf("\n[SOS] load_streets: No he podido abrir el archivo: %s\n", f);
         return;
     }
-    char line[256];
-    Street *head= NULL;
-    double lat1, lon1, lat2, lon2;
-    int id1, id2; 
-    int max_lat=-90.0; 
-    int min_lat=90.0;
-    int max_lon=-180.0; 
-    int min_lon=180.0;
-
-    int current_capacity= 1000;
-    Node* nodes=malloc(current_capacity*sizeof(Node));
     
-    while (fgets(line, sizeof(line),file)){
-      Street* new_street= malloc(sizeof(Street));
-      if (new_street==NULL) break;
-      int filled = sscanf(line, "%d, %lf, %lf, %d, %lf, %lf, %d, %[^\n]", &id1, &lat1,&lon1,&id2, &lat2, &lon2,&new_street->length, new_street->street_name);
-      if (filled==8){
-        int highest_id_line; //useful for allocating memory
-        if (id1>=id2){
-            highest_id_line= id1;
-        } else{
-            highest_id_line =id2;
+    char line[256];
+    Street *head = NULL;
+    
+    // 1. Usamos long long para los IDs colosales de OpenStreetMap
+    long long id1, id2; 
+    double lat1, lon1, lat2, lon2;
+    
+    double max_lat = -90.0; 
+    double min_lat = 90.0;
+    double max_lon = -180.0; 
+    double min_lon = 180.0;
+
+    *nodes_head = NULL; 
+
+    while (fgets(line, sizeof(line), file)) {
+        Street* new_street = malloc(sizeof(Street));
+        if (new_street == NULL) break;
+        
+        // 2. Ajustamos sscanf: %lld para long long, %lf para la longitud
+        int filled = sscanf(line, "%lld, %lf, %lf, %lld, %lf, %lf, %lf, %[^\n]", 
+                            &id1, &lat1, &lon1, &id2, &lat2, &lon2, &new_street->length, new_street->street_name);
+        
+        if (filled == 8) {
+            // Actualizamos los máximos y mínimos de la cuadrícula
+            if (lat1 > max_lat) max_lat = lat1;
+            if (lat1 < min_lat) min_lat = lat1;
+            if (lon1 > max_lon) max_lon = lon1;
+            if (lon1 < min_lon) min_lon = lon1;
+            if (lat2 > max_lat) max_lat = lat2;
+            if (lat2 < min_lat) min_lat = lat2;
+            if (lon2 > max_lon) max_lon = lon2;
+            if (lon2 < min_lon) min_lon = lon2;
+
+            // 3. Guardamos los datos de los nodos DIRECTAMENTE en la calle
+            new_street->start.id = id1;
+            new_street->start.lat = lat1;
+            new_street->start.lon = lon1;
+
+            new_street->end.id = id2;
+            new_street->end.lat = lat2;
+            new_street->end.lon = lon2;
+
+            new_street->mid_lat = (lat1 + lat2) / 2.0;
+            new_street->mid_lon = (lon1 + lon2) / 2.0;
+            
+            // Enganchamos la calle a la lista
+            new_street->next = head;
+            head = new_street;
+        } else {
+            free(new_street); // Si la línea está malformada, la descartamos
         }
-        if (highest_id_line>=current_capacity){
-            current_capacity= highest_id_line+500; //buffer space
-            Node* temp = realloc(nodes,current_capacity*sizeof(Node));//reallocate space so it fits into a new list in case it returns NULL
-            if (temp==NULL){
-                free(new_street);
-                break;
-            }
-            nodes=temp;
-            }
-        //getting max and min lat and lon. useful for defining grid size for spatial hashing
-        if (max_lat<lat1) max_lat=lat1;
-        if (min_lat>lat1) min_lat=lat1;
-
-        if (max_lon<lon1) max_lon=lon1;
-        if (min_lon>lon1) min_lon=lon1;
-
-        if (max_lat<lat2) max_lat=lat2;
-        if (min_lat>lat2) min_lat=lat2;
-
-        if (max_lon<lon2) max_lon=lon2;
-        if (min_lon>lon2) min_lon=lon2;
-
-        //storing the two nodes of line into the list of nodes
-        nodes[id1].lat=lat1;
-        nodes[id1].lon=lon1;
-        nodes[id1].id=id1;
-
-        nodes[id2].lat=lat2;
-        nodes[id2].lon=lon2;
-        nodes[id2].id=id2;
-        new_street->mid_lat = (lat1 + lat2) / 2.0;
-        new_street->mid_lon = (lon1 + lon2) / 2.0;
-        new_street->next= head;
-        head = new_street;
-      } else {
-        free(new_street);
-      }
     }
-    *street_head= head;//saving the addresses in global pointer so they are not lost when function ends.
-    *nodes_head= nodes;// we use * to dereference the double pointers of the main
+    
+    *street_head = head; 
 
-    //to get grid size (row and cols)
-    int rows= (max_lat-min_lat)/0.01;
-    int cols= (max_lon-min_lon)/0.01;
-    int estimated_boxes = rows*cols;
+    int rows = (max_lat - min_lat) / 0.01;
+    int cols = (max_lon - min_lon) / 0.01;
+    int estimated_boxes = rows * cols;
 
-    if (is_prime(estimated_boxes)==1){
-        *GridSize= estimated_boxes;
-    }else{
-        *GridSize=get_next_prime(estimated_boxes);//we want a prime to get less collisions
+    if (estimated_boxes <= 0) estimated_boxes = 100; 
+    if (is_prime(estimated_boxes) == 1) {
+        *GridSize = estimated_boxes;
+    } else {
+        *GridSize = get_next_prime(estimated_boxes); 
     }
 
     fclose(file);
@@ -388,49 +380,48 @@ void street_to_box (Street* street,GridBox** GridBoxes, int grid_size){ //receiv
 }
 
 //CODE FOR INTERSECTION HASH MAPPING
-int intersection_hash(int intersection_id, int graph_size){
-    return intersection_id%graph_size; //by modulo to get index
+int intersection_hash(long long target_id, int graph_size) {
+    int index = target_id % graph_size;
+    if (index < 0) {
+        index += graph_size;
+    }
+    return index;
 }
 
-void street_to_intersection (IntersectionBucket** graph, int graph_size, int target_id, Street* street){
-    //you have target id as a parameter bc each street has two nodes, so you have to indicate which one it is now
-    int index= intersection_hash(target_id, graph_size);//where it will be mapped to
+void street_to_intersection(IntersectionBucket** graph, int graph_size, long long target_id, Street* street) {
+    
+    
+    int index = intersection_hash(target_id, graph_size);
 
-    IntersectionBucket* current= graph[index];
-    IntersectionBucket* targetBucket= NULL;
+    IntersectionBucket* current = graph[index];
 
-    //get target bucket
-    //1. is it already in map?
-    while (current!=NULL){
-        if (current->intersection_id==target_id){
-            targetBucket=current;
+    IntersectionBucket* targetBucket = NULL;
+
+    while (current != NULL) {
+        if (current->intersection_id == target_id) {
+            targetBucket = current;
             break;
         }
-        current=current->next;
+        current = current->next;
     }
 
-    if (targetBucket==NULL){//2. it isn't yet, so create it
-        //1) memory
-        targetBucket= malloc(sizeof(IntersectionBucket));
-        if (targetBucket==NULL) return;
-        //2) fill
-        targetBucket->intersection_id= target_id;
-        targetBucket->connected_streets= NULL;
-        //3) chain
-        targetBucket->next= graph[index];
-        graph[index]= targetBucket;
+    if (targetBucket == NULL) {
+        targetBucket = malloc(sizeof(IntersectionBucket));
+        if (targetBucket == NULL) return;
+        
+        targetBucket->intersection_id = target_id;
+        targetBucket->connected_streets = NULL;
+        
+        targetBucket->next = graph[index];
+        graph[index] = targetBucket;
     }
     
-    // Create a new node for the street list inside this bucket
     StreetNode* new_node = malloc(sizeof(StreetNode));
     if (new_node != NULL) {
         new_node->street = street;
-        
-    // Push to the head of the connected_streets linked list
-    new_node->next = targetBucket->connected_streets;
-    targetBucket->connected_streets = new_node;
+        new_node->next = targetBucket->connected_streets;
+        targetBucket->connected_streets = new_node;
     }
-
 }
 
 double haversine(Position posA, Position posB) {

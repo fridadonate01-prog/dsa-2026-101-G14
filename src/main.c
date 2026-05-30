@@ -37,7 +37,7 @@ int main() {
 
     House* my_houses = load_houses(file_path); //pointer to the first house
 
-    find_address(my_houses);
+    origin_street = find_address(my_houses, all_streets);
     free_houses(my_houses);
   } else if(chosen_input==2){//the user chose place
     //Construct path: assuming execution form 'src' folder
@@ -57,7 +57,7 @@ int main() {
   if (chosen_dest == 1) { // the user chose address
     sprintf(file_path, "../maps/%s/houses.txt", all_maps[chosen_map]);
     House* dest_houses = load_houses(file_path);
-    find_address(dest_houses);
+    dest_street = find_address(dest_houses, all_streets);
     free_houses(dest_houses);
   }
   else if (chosen_dest == 2) {  // the user chose place
@@ -69,6 +69,23 @@ int main() {
   else {
     printf("Not implemented yet. \n");
   }
+  if (all_streets == NULL) {
+      printf("\n[ERROR CRITICO]: all_streets esta vacio (NULL). Revisa tu funcion load_streets o la ruta del archivo streets.txt.\n");
+      return 1; // Salimos antes de explotar
+  }
+
+  if (origin_street == NULL) {
+      printf("\n[ERROR]: No se ha podido calcular la calle de origen mas cercana.\n");
+  } else {
+      printf("TEST, aqui origin street vale: %s\n", origin_street->street_name);
+  }
+
+  if (dest_street == NULL) {
+      printf("\n[ERROR]: No se ha podido calcular la calle de destino mas cercana.\n");
+  } else {
+      printf("TEST, aqui dest street vale: %s\n", dest_street->street_name);
+  }
+
 
   // Initialize and fill the Intersection Hash Map Graph before routing
   IntersectionBucket** graph = calloc(grid_size, sizeof(IntersectionBucket*));

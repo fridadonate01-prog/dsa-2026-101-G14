@@ -116,37 +116,30 @@ void free_path(StreetNode* head) {
 
 // The Pathfinding Function
 StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets, IntersectionBucket** graph, int graph_size) {
-    // Edge case check
     if (!fromStreet || !toStreet || !all_streets) {
         return NULL;
     }
 
-    // *Optimization BFS: Reset all street visited flags to 0
     Street* reset_curr = all_streets;
     while (reset_curr != NULL) {
         reset_curr->visited = 0;
         reset_curr = reset_curr->next;
     }
 
-    // Create an empty queue of street lists, Q
     Queue Q;
     init_queue(&Q);
 
-    // Create a street list [fromStreet], initial_path
     StreetNode* initial_path = NULL;
     append_street(&initial_path, fromStreet);
 
-    // Enqueue initial_path into Q
     fromStreet->visited = 1;
     enqueue(&Q, initial_path);
 
     StreetNode* final_route = NULL;   
 
     while (!is_queue_empty(&Q)) {
-        
         StreetNode* path = dequeue(&Q);
 
-        // current_street = path[-1] (Find the last element of the list)
         StreetNode* tracking = path;
         while (tracking->next != NULL) {
             tracking = tracking->next;
@@ -158,10 +151,11 @@ StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets
             break;
         }
 
-        int intersections_to_check[2] = {current_street->start.id, current_street->end.id};
+        // IDs guardados como long long
+        long long intersections_to_check[2] = {current_street->start.id, current_street->end.id};
 
         for (int i = 0; i < 2; i++) {
-            int target_id = intersections_to_check[i];
+            long long target_id = intersections_to_check[i];
             int index = intersection_hash(target_id, graph_size);
 
             IntersectionBucket* current_bucket = graph[index];
@@ -193,7 +187,6 @@ StreetNode* find_route(Street* fromStreet, Street* toStreet, Street* all_streets
             }
         }
 
-        // If this wasn't our target path, free its temporary list copy
         if (final_route != path) {
             free_path(path);
         }
@@ -288,7 +281,7 @@ void print_route_directions(StreetNode* route) {
     int step = 1;
 
     // Print the starting street
-    printf("%d. Start at %s and continue for %dm\n", step++, curr->street->street_name, curr->street->length);
+    printf("%d. Start at %s and continue for %lfm\n", step++, curr->street->street_name, curr->street->length);
 
     while (curr != NULL && curr->next != NULL) {
         Street* current_street = curr->street;
@@ -298,11 +291,11 @@ void print_route_directions(StreetNode* route) {
         int turn = get_turn_direction(current_street, next_street);
 
         if (turn == 1) {
-            printf("%d. Turn left to %s and continue for %dm\n", step++, next_street->street_name, next_street->length);
+            printf("%d. Turn left to %s and continue for %lfm\n", step++, next_street->street_name, next_street->length);
         } else if (turn == -1) {
-            printf("%d. Turn right to %s and continue for %dm\n", step++, next_street->street_name, next_street->length);
+            printf("%d. Turn right to %s and continue for %lfm\n", step++, next_street->street_name, next_street->length);
         } else {
-            printf("%d. Continue straight to %s and continue for %dm\n", step++, next_street->street_name, next_street->length);
+            printf("%d. Continue straight to %s and continue for %lfm\n", step++, next_street->street_name, next_street->length);
         }
 
         curr = curr->next;  // Advance to the next street segment
