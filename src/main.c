@@ -81,15 +81,15 @@ int main() {
     Place* dest_places = load_places(file_path);
     dest_street=find_place(dest_places,all_streets);
     free_place(dest_places);
-  } else if (chosen_dest == 3) { // User chose Coordinates
-    double user_lat, user_lon;
-    char coordinate_buffer[100];  
-    
-    printf("Enter Destination Latitude and Longitude (separated by a space, e.g. 41.3982 2.1421:\n)");
+  } 
+  else if (chosen_input == 3) { // User chose Coordinates
+    double dest_lat, dest_lon;
+    char coordinate_buffer[100];
+
+    printf("Enter Destination Latitude and Longitude (separated by a space, e.g., 41.3982 2.1421):\n");
     if (fgets(coordinate_buffer, sizeof(coordinate_buffer), stdin) != NULL) {
-      if (sscanf(coordinate_buffer, "%lf %lf", &user_lat, &user_lon) == 2) {
-        // Find the closest destination street
-        dest_street = get_closest_street(user_lat, user_lon, all_streets);
+      if (sscanf(coordinate_buffer, "%lf %lf", &dest_lat, &dest_lon) == 2) {
+        dest_street = get_closest_street(dest_lat, dest_lon, all_streets);
         if (dest_street != NULL) {
           printf("Destination locked to nearest street: %s\n", dest_street->street_name);
         } else {
@@ -100,6 +100,7 @@ int main() {
       }
     }
   }
+  
 
 // Initialize and fill the Intersection Hash Map Graph before routing
   IntersectionBucket** graph = calloc(grid_size, sizeof(IntersectionBucket*));
