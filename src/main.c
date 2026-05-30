@@ -47,8 +47,24 @@ int main() {
 
     find_place(my_places);
     free_place(my_places);
-  } else{
-    printf("Not implemented yet. \n");
+  } else if (chosen_input == 3) { // User chose Coordinates
+    double user_lat, user_lon;
+    char coordinate_buffer[100];
+
+    printf("Enter Origin Latitude and Longitude (separated by a space, e.g., 41.3851 2.1734):\n");
+    if (fgets(coordinate_buffer, sizeof(coordinate_buffer), stdin) != NULL) {
+      if (sscanf(coordinate_buffer, "%lf %lf", &user_lat, &user_lon) == 2) {
+        // Find the closest street using your Haversine-based lookup function
+        origin_street = get_closest_street(user_lat, user_lon, all_streets);
+        if (origin_street != NULL) {
+          printf("Origin locked to nearest street: %s\n", origin_street->street_name);
+        } else {
+          printf("Error: No streets found on the map matching those coordinates. \n");
+        }
+      } else {
+        printf("Error: Invalid coordinate input format. \n");
+      }
+    }
   }
 
   //DESTINATION SECTION
@@ -65,9 +81,24 @@ int main() {
     Place* dest_places = load_places(file_path);
     find_place(dest_places);
     free_place(dest_places);
-  }
-  else {
-    printf("Not implemented yet. \n");
+  } else if (chosen_dest == 3) { // User chose Coordinates
+    double user_lat, user_lon;
+    char coordinate_buffer[100];  
+    
+    printf("Enter Destination Latitude and Longitude (separated by a space, e.g. 41.3982 2.1421:\n)");
+    if (fgets(coordinate_buffer, sizeof(coordinate_buffer), stdin) != NULL) {
+      if (sscanf(coordinate_buffer, "%lf %lf", &user_lat, &user_lon) == 2) {
+        // Find the closest destination street
+        dest_street = get_closest_street(user_lat, user_lon, all_streets);
+        if (dest_street != NULL) {
+          printf("Destination locked to nearest street: %s\n", dest_street->street_name);
+        } else {
+          printf("Error: No streets found on the map matching those coordinates. \n");
+        }
+      } else {
+        printf("Error: Invalid coordinate input format. \n");
+      }
+    }
   }
   if (all_streets == NULL) {
       printf("\n[ERROR CRITICO]: all_streets esta vacio (NULL). Revisa tu funcion load_streets o la ruta del archivo streets.txt.\n");
