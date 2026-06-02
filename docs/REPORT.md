@@ -1,9 +1,9 @@
 # Report
 
-## 1. Runtime Compexity Analysis in Big-O
+## 1. Runtime Complexity Analysis in Big-O
 
 ### 1.1 Initializing the Intersections Map 
-**Complexxity: O(S)**
+**Complexity: O(S)**
 *Where `S` is the total number of street segments.*
 In our implementation (`find.c`), the initialization uses the `street_to_intersection` function. 
 To build the map, the program must iterate through all loaded street segments once. 
@@ -13,14 +13,14 @@ Inserting the street at the head of the `IntersectionBucket`'s linked list also 
 ### 1.2 Finding the Coordinates of a Street or Place
 **Complexity: O(N)**
 *Where `N` is the number of houses or places in the map database.*
-In our `fins_address`and `fin_place`functions (`find.c`), the algorithm performs a sequential linear search. It uses a `while (current != NULL)` loop to check every single node in the linked list, comparing the string name via `strcasecmp()`.
+In our `find_address`and `findb_place`functions (`find.c`), the algorithm performs a sequential linear search. It uses a `while (current != NULL)` loop to check every single node in the linked list, comparing the string name via `strcasecmp()`.
 In the worst-case scenario (the address is at the very end of the list or does not exist), it must check all `N` items, making it an **O(N)** operation.
 
 ### 1.3 Path-Finding Algorithm (BFS)
 **Compexity: O(V + E)** 
 *Where `V` is the number of visited streets and `E` is the total number of connected edges evaluated.*
 We use the `IntersectionBucket** graph` hash map. Therefore, `route.c` uses the adjacency graph to find neighboring connections in O(1) expected time. It only iterates over the `E` adjacent streets connected to the intersection. 
-Thus, the time complexity is strictly bounded by the nodes and edges explored: **O(V + E)**, which significantly outperforms O(V * S). 
+Thus, the time complexity is strictly bounded by the nodes and edges explored: **O(V + E)**. 
 
 ---
 
